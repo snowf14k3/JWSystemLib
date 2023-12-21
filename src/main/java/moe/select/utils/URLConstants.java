@@ -28,10 +28,9 @@ public class URLConstants {
     /* 退课 */
     public static String EXIT_COURSE = "http://jw.gxstnu.edu.cn/jsxsd/xsxkjg/xstkOper?jx0404id=<jx0404id>&tkyy=<reason>";
 
-
     public static String EXIT_JWSYSTEM = "http://jw.gxstnu.edu.cn/jsxsd/xk/LoginToXk?method=exit&tktime="+System.currentTimeMillis();
     /* 退出选课系统 */
-    public static String EXIT_COURSE_WEN = "http://jw.gxstnu.edu.cn/jsxsd/xsxk/xsxk_exit?jx0404id=1";
+    public static String EXIT_COURSE_WEB = "http://jw.gxstnu.edu.cn/jsxsd/xsxk/xsxk_exit?jx0404id=1";
 
     /**
      * 参数

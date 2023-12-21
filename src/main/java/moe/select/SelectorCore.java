@@ -38,7 +38,6 @@ public class SelectorCore {
         // 登录成功的 响应
         Connection.Response response = HttpUtil.sendPost(URLConstants.LOGIN2, form);
         if (response != null) {
-            System.out.println(response.cookies());
 
             this.loggedResponse = response;
             this.cookie = response.cookie("JSESSIONID");
@@ -53,7 +52,7 @@ public class SelectorCore {
     public void exitSystem() {
         Map<String, String> headers = new HashMap<>();
         headers.put("Cookie", "JSESSIONID=" + this.cookie);
-        Connection.Response exitSeletor = HttpUtil.sendGet(URLConstants.EXIT_COURSE_WEN, headers);
+        Connection.Response exitSeletor = HttpUtil.sendGet(URLConstants.EXIT_COURSE_WEB, headers);
 
         // 退出选课系统的response body
         System.out.println(exitSeletor.body());

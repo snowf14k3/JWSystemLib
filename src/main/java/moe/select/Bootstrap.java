@@ -16,8 +16,9 @@ public class Bootstrap {
 
         /* 是否登录成功 */
         if (core.loggedResponse != null && (core.loggedResponse.statusCode() == 302 || core.loggedResponse.statusCode() == 200)) {
-            core.getElectiveCourseByTeacher("陆");
+//            core.getElectiveCourseByTeacher("陆");
 
+            System.out.println(core.cookie);
             // 退出系统
             core.exitSystem();
         } else {
