@@ -53,12 +53,13 @@ public class SelectorCore {
     public void exitSystem() {
         Map<String, String> headers = new HashMap<>();
         headers.put("Cookie", "JSESSIONID=" + this.cookie);
-        Connection.Response exitSeletor = HttpUtil.sendGet(URLConstants.EXIT_COURSE_WEN,headers);
+        Connection.Response exitSeletor = HttpUtil.sendGet(URLConstants.EXIT_COURSE_WEN, headers);
 
-        // 退出
+        // 退出选课系统的response body
         System.out.println(exitSeletor.body());
 
-        Connection.Response exitAll = HttpUtil.sendGet(URLConstants.EXIT_JWSYSTEM,headers);
+        // 教务系统退出
+        Connection.Response exitAll = HttpUtil.sendGet(URLConstants.EXIT_JWSYSTEM, headers);
         System.out.println(exitAll.body());
     }
 
@@ -68,9 +69,38 @@ public class SelectorCore {
     public void loginCourseWeb() {
         Map<String, String> headers = new HashMap<>();
         headers.put("Cookie", "JSESSIONID=" + this.cookie);
-        // 先证明我登录了学生选课系统
+        // 得事先登录学生选课系统,让后台存SESSIONID
         HttpUtil.sendGet(URLConstants.COURSE_LOGIN, headers);
     }
+
+    public void selectElectiveCourse(Course course) {
+        selectCourse(URLConstants.ELECTIVE_COURSE_SELECT, course);
+    }
+
+    public void selectRequiredCourse(Course course) {
+        selectCourse(URLConstants.REQUIRED_COURSE_SELECT, course);
+    }
+
+    public void selectCourse(String url, Course course) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Cookie", "JSESSIONID=" + this.cookie);
+        // 得事先登录学生选课系统,让后台存SESSIONID
+        Connection.Response response = HttpUtil.sendGet(url
+                .replace("<kcid>", course.getKcid())
+                .replace("<jx0404id>", course.getJxID()), headers);
+
+        //{"success":true,"message":"选课成功","jfViewStr":""}
+
+        String message = response.body();
+
+        if (message.contains("true")) {
+            System.out.println("选课成功");
+        } else if (message.contains("false")) {
+            System.out.println("选课失败");
+        }
+
+    }
+
 
     /**
      * 更慢的登录
@@ -109,15 +139,6 @@ public class SelectorCore {
 
                 // 导向其网站拿
                 Connection.Response ref = HttpUtil.sendGet(response.header("Location"));
-
-                System.out.println("=========================");
-                System.out.println("encoded: ");
-                System.out.println(encoded);
-                System.out.println("login form:");
-                System.out.println(form);
-                System.out.println("=========================");
-                System.out.println();
-
                 //  登录成功分发 cookie
                 this.loggedResponse = ref;
                 this.cookie = ref.cookie("JSESSIONID");
@@ -159,12 +180,7 @@ public class SelectorCore {
     public void searchElectiveList(String courseName, String teacher, String week, String section, boolean removeFull, boolean removeConflict, String courseType, boolean loc, String size) {
         CourseForm cf = new CourseForm(new LinkedHashMap<>());
 
-        if (size.isEmpty()) {
-            // 第一次请求 1一个长度
-            cf.putElectiveFormData("1", "0", "1");
-        } else {
-            cf.putElectiveFormData("3", "0", size);
-        }
+        cf.putElectiveFormData("3", "0", size);
 
         // 查询的参数
         String args = "?kcxx=" + courseName + "&skls=" + teacher + "&skxq=" + week + "&skjc=" + section + "&sfym=" + removeFull + "&sfct=" + removeConflict + "&szjylb=" + courseType + "&sfxx=" + loc;
@@ -187,9 +203,13 @@ public class SelectorCore {
         searchElectiveList("", "", "", "", false, false, "", true, "300");
     }
 
+    public void getElectiveCourseByName(String courseName) {
+        searchElectiveList(courseName, "", "", "", false, false, "", true, "300");
+    }
 
-
-
+    public void getElectiveCourseByTeacher(String teacher) {
+        searchElectiveList("", teacher, "", "", false, false, "", true, "300");
+    }
 
 
 }

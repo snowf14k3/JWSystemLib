@@ -12,13 +12,15 @@ public class Bootstrap {
 
         SelectorCore core = new SelectorCore();
         // 登录
-        core.login(username,password);
+        core.login(username, password);
 
         /* 是否登录成功 */
-        if (core.loggedResponse != null && core.loggedResponse.statusCode() == 302 || core.loggedResponse.statusCode() == 200) {
-            core.getAllElectiveCourse();
+        if (core.loggedResponse != null && (core.loggedResponse.statusCode() == 302 || core.loggedResponse.statusCode() == 200)) {
+            core.getElectiveCourseByTeacher("陆");
+
+            // 退出系统
             core.exitSystem();
-        }else{
+        } else {
             System.err.println("error !");
         }
     }
