@@ -1,13 +1,13 @@
-package moe.selector;
+package moe.select;
 
 
-import moe.selector.list.CourseForm;
+import moe.select.list.CourseForm;
 
-import moe.selector.object.Course;
-import moe.selector.utils.HttpUtil;
-import moe.selector.utils.JsonUtil;
-import moe.selector.utils.PasswordUtil;
-import moe.selector.utils.URLConstants;
+import moe.select.object.Course;
+import moe.select.utils.HttpUtil;
+import moe.select.utils.JsonUtil;
+import moe.select.utils.PasswordUtil;
+import moe.select.utils.URLConstants;
 import org.jsoup.Connection;
 
 import javax.swing.*;

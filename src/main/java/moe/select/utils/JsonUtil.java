@@ -1,7 +1,7 @@
-package moe.selector.utils;
+package moe.select.utils;
 
 import com.google.gson.*;
-import moe.selector.object.Course;
+import moe.select.object.Course;
 
 import java.util.ArrayList;
 

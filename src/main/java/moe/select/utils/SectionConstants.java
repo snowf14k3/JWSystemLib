@@ -1,4 +1,4 @@
-package moe.selector.utils;
+package moe.select.utils;
 
 public class SectionConstants {
     public static String ONE2TWO = "1-1-";

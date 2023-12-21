@@ -1,4 +1,4 @@
-package moe.selector;
+package moe.select;
 
 import java.util.Scanner;
 

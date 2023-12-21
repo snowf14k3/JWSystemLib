@@ -1,4 +1,4 @@
-package moe.selector.utils;
+package moe.select.utils;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
