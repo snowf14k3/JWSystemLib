@@ -1,4 +1,4 @@
-package moe.select.utils;
+package moe.snowflake.courseSelect.utils;
 
 public class PasswordUtil {
 

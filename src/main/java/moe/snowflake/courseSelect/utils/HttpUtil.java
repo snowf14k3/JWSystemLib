@@ -1,4 +1,4 @@
-package moe.select.utils;
+package moe.snowflake.courseSelect.utils;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;

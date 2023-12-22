@@ -1,7 +1,7 @@
-package moe.select.utils;
+package moe.snowflake.courseSelect.utils;
 
 import com.google.gson.*;
-import moe.select.course.Course;
+import moe.snowflake.courseSelect.course.Course;
 
 import java.util.ArrayList;
 

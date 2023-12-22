@@ -1,4 +1,4 @@
-package moe.select.course;
+package moe.snowflake.courseSelect.course;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;

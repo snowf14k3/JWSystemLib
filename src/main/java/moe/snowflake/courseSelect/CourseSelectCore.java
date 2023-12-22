@@ -1,13 +1,13 @@
-package moe.select;
+package moe.snowflake.courseSelect;
 
 
-import moe.select.course.CourseForm;
+import moe.snowflake.courseSelect.course.CourseForm;
 
-import moe.select.course.Course;
-import moe.select.utils.HttpUtil;
-import moe.select.utils.CourseHandler;
-import moe.select.utils.PasswordUtil;
-import moe.select.utils.URLConstants;
+import moe.snowflake.courseSelect.course.Course;
+import moe.snowflake.courseSelect.utils.HttpUtil;
+import moe.snowflake.courseSelect.utils.CourseHandler;
+import moe.snowflake.courseSelect.utils.PasswordUtil;
+import moe.snowflake.courseSelect.utils.URLConstants;
 import org.jsoup.Connection;
 
 import java.util.*;

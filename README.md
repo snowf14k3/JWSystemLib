@@ -4,7 +4,7 @@
 ## 声明
 1. 本项目使用 `MIT License`,根据协议允许您进行任意修改/发布/传播,且造成后果与本项目无关.
 2. 特别感谢<a href="https://www.jetbrains.com"> JetBrains </a>  与 <a href="https://jsoup.org/"> JSoup </a>对这个项目的支持。
-3. 本项目仅为实现教务系统一些功能,本项目不推荐商用
+3. 本项目仅为实现教务系统一些功能,本项目不推荐商用.
 ---
 
 ## 由来和吐槽
@@ -41,6 +41,6 @@ public class Test{
 ### 例子
 
 1. [选公共选修课](https://github.com/ciallo-dev/CourseSelector/blob/master/src/test/java/TestElectiveCourse.java) 例子
-2. [各种请求的URL详解](https://github.com/ciallo-dev/CourseSelector/blob/master/src/main/java/moe/select/utils/URLConstants.java) 预览
+2. [各种请求的URL详解](https://github.com/ciallo-dev/CourseSelector/blob/master/src/main/java/moe/snowflake/courseSelect/utils/URLConstants.java) 预览
 
 ---
