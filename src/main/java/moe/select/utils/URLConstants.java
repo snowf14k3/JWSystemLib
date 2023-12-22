@@ -157,4 +157,10 @@ public class URLConstants {
      */
     public static String REQUIRED_COURSE_SELECT = "http://jw.gxstnu.edu.cn/jsxsd/xsxkkc/bxxkOper?kcid=<kcid>&cfbs=null&jx0404id=<jx0404id>&xkzy=&trjf=";
 
+    /**
+     * GET
+     * 现在当前课程的列表
+     */
+    public static String MY_COURSE_LIST = "http://jw.gxstnu.edu.cn/jsxsd/xsxkjg/comeXkjglb";
+
 }

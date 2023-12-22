@@ -16,7 +16,6 @@ import java.util.*;
 public class SelectorCore {
     public static SelectorCore instance;
     public Connection.Response loggedResponse;
-
     public String cookie;
 
     public SelectorCore() {
@@ -52,14 +51,21 @@ public class SelectorCore {
     public void exitSystem() {
         Map<String, String> headers = new HashMap<>();
         headers.put("Cookie", "JSESSIONID=" + this.cookie);
-        Connection.Response exitSeletor = HttpUtil.sendGet(URLConstants.EXIT_COURSE_WEB, headers);
+        Connection.Response exitSelect = HttpUtil.sendGet(URLConstants.EXIT_COURSE_WEB, headers);
 
-        // 退出选课系统的response body
-        System.out.println(exitSeletor.body());
-
-        // 教务系统退出
         Connection.Response exitAll = HttpUtil.sendGet(URLConstants.EXIT_JWSYSTEM, headers);
-        System.out.println(exitAll.body());
+
+        if (exitSelect != null && exitAll != null) {
+
+            // 退出选课系统的response body
+            System.out.println(exitSelect.body());
+
+            // 教务系统退出
+            System.out.println(exitAll.body());
+        } else {
+            System.err.println("unknown error !");
+        }
+
     }
 
     /**
@@ -72,10 +78,20 @@ public class SelectorCore {
         HttpUtil.sendGet(URLConstants.COURSE_LOGIN, headers);
     }
 
+    /**
+     * 选择公共选修课
+     *
+     * @param course 课程对象
+     */
     public void selectElectiveCourse(Course course) {
         selectCourse(URLConstants.ELECTIVE_COURSE_SELECT, course);
     }
 
+    /**
+     * 选择公共必修课
+     *
+     * @param course 课程的对象
+     */
     public void selectRequiredCourse(Course course) {
         selectCourse(URLConstants.REQUIRED_COURSE_SELECT, course);
     }
@@ -88,14 +104,18 @@ public class SelectorCore {
                 .replace("<kcid>", course.getKcid())
                 .replace("<jx0404id>", course.getJxID()), headers);
 
-        //{"success":true,"message":"选课成功","jfViewStr":""}
+        //response
+        // {"success":true,"message":"选课成功","jfViewStr":""}
+        // {"success":[true,false],"message":"选课失败：此课堂选课人数已满！"}
 
         String message = response.body();
 
         if (message.contains("true")) {
-            System.out.println("选课成功");
-        } else if (message.contains("false")) {
+            System.out.println("选课成功 剩余人数 " + (Integer.parseInt(course.getRemain()) - 1));
+            System.out.println(course);
+        } else if (message.contains("true,false")) {
             System.out.println("选课失败");
+            System.out.println(course);
         }
 
     }
@@ -135,8 +155,7 @@ public class SelectorCore {
             Connection.Response response = HttpUtil.sendPost(URLConstants.LOGIN, form, headers);
 
             if (response != null) {
-
-                // 导向其网站拿
+                // 重定向到 URLConstants.LOGIN2 + method= jwxt + ticqzket= token
                 Connection.Response ref = HttpUtil.sendGet(response.header("Location"));
                 //  登录成功分发 cookie
                 this.loggedResponse = ref;
@@ -149,9 +168,20 @@ public class SelectorCore {
         }
     }
 
-    public void searchRequiredList(String size) {
+    /**
+     * 列出全部必修课
+     */
+    public void searchAllRequiredList(){
+        searchRequiredList(30);
+    }
+
+    /**
+     * 列出必修课的列表
+     * @param size
+     */
+    public void searchRequiredList(int size) {
         CourseForm cf = new CourseForm();
-        cf.putRequiredFormData("3", "0", size);
+        cf.putRequiredFormData("3", "0", String.valueOf(size));
 
         Map<String, String> headers = new HashMap<>();
         headers.put("Cookie", "JSESSIONID=" + this.cookie);
@@ -176,10 +206,10 @@ public class SelectorCore {
      * @param loc            过滤限选课程
      * @param size           显示数量 空字符串显示全部
      */
-    public void searchElectiveList(String courseName, String teacher, String week, String section, boolean removeFull, boolean removeConflict, String courseType, boolean loc, String size) {
+    public void searchElectiveList(String courseName, String teacher, String week, String section, boolean removeFull, boolean removeConflict, String courseType, boolean loc, int size) {
         CourseForm cf = new CourseForm(new LinkedHashMap<>());
 
-        cf.putElectiveFormData("3", "0", size);
+        cf.putElectiveFormData("3", "0", String.valueOf(size));
 
         // 查询的参数
         String args = "?kcxx=" + courseName + "&skls=" + teacher + "&skxq=" + week + "&skjc=" + section + "&sfym=" + removeFull + "&sfct=" + removeConflict + "&szjylb=" + courseType + "&sfxx=" + loc;
@@ -197,17 +227,27 @@ public class SelectorCore {
         JOptionPane.showInputDialog(null, "", sb.toString());
     }
 
-
+    /**
+     * 获取全部公共选修课列表
+     */
     public void getAllElectiveCourse() {
-        searchElectiveList("", "", "", "", false, false, "", true, "300");
+        searchElectiveList("", "", "", "", false, false, "", true, 300);
     }
 
+    /**
+     * 通过课程名称获取课程
+     * @param courseName 课程名称
+     */
     public void getElectiveCourseByName(String courseName) {
-        searchElectiveList(courseName, "", "", "", false, false, "", true, "300");
+        searchElectiveList(courseName, "", "", "", false, false, "", true, 300);
     }
 
+    /**
+     * 通过老师名称搜索课程,支持模糊搜索
+     * @param teacher 老师名称
+     */
     public void getElectiveCourseByTeacher(String teacher) {
-        searchElectiveList("", teacher, "", "", false, false, "", true, "300");
+        searchElectiveList("", teacher, "", "", false, false, "", true, 300);
     }
 
 
