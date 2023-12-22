@@ -157,8 +157,8 @@ public class CourseSelectCore {
      *
      * @param course 课程对象
      */
-    public void selectElectiveCourse(Course course) {
-        selectCourse(URLConstants.ELECTIVE_COURSE_SELECT, course);
+    public boolean selectElectiveCourse(Course course) {
+        return selectCourse(URLConstants.ELECTIVE_COURSE_SELECT, course);
     }
 
     /**
@@ -166,8 +166,8 @@ public class CourseSelectCore {
      *
      * @param course 课程的对象
      */
-    public void selectRequiredCourse(Course course) {
-        selectCourse(URLConstants.REQUIRED_COURSE_SELECT, course);
+    public boolean selectRequiredCourse(Course course) {
+        return selectCourse(URLConstants.REQUIRED_COURSE_SELECT, course);
     }
 
     /**
@@ -175,7 +175,7 @@ public class CourseSelectCore {
      * @param url 选课的 URL
      * @param course 课程的id
      */
-    private void selectCourse(String url, Course course) {
+    private boolean selectCourse(String url, Course course) {
 
         // 得事先登录学生选课系统,让后台存SESSIONID
         Connection.Response response = HttpUtil.sendGet(url
@@ -188,13 +188,11 @@ public class CourseSelectCore {
 
         String message = response.body();
         if (message.contains("true")) {
-            System.out.println("选课成功 剩余人数 " + (Integer.parseInt(course.getRemain()) - 1));
-            System.out.println(course);
+            return true;
         } else if (message.contains("true,false")) {
-            System.out.println("选课失败");
-            System.out.println(course);
+            return false;
         }
-
+        return false;
     }
 
     /**

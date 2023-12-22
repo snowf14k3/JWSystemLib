@@ -12,7 +12,7 @@ public class Course {
     private String type;
     private String name;
 
-    private String remain;
+    private int remain;
 
     public Course(){
     }
@@ -64,7 +64,7 @@ public class Course {
     }
 
     public void setRemain(String remain) {
-        this.remain = remain;
+        this.remain = Integer.parseInt(remain);
     }
 
     public String getKcid() {
@@ -95,7 +95,7 @@ public class Course {
         return name;
     }
 
-    public String getRemain() {
+    public int getRemain() {
         return remain;
     }
 

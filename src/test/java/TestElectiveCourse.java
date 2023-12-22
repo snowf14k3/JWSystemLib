@@ -20,7 +20,7 @@ public class TestElectiveCourse {
             for (int i = 0; i < courses.size(); i++) {
                 Course course = courses.get(i);
 
-                System.out.printf("序号 %d | 课程名称: %s | 剩余: %s %n", i + 1, course.getName(), course.getRemain());
+                System.out.printf("序号 %d | 老师: %s | 课程名称: %s | 剩余数量: %s %n", i + 1, course.getTeacher(), course.getName(), course.getRemain());
             }
 
             Scanner sr = new Scanner(System.in);
@@ -28,18 +28,24 @@ public class TestElectiveCourse {
                 int select = sr.nextInt() - 1;
 
                 if (select > 0 && select < courses.size()) {
+                    Course selected = courses.get(select);
                     // 选择那个课程
-                    core.selectElectiveCourse(courses.get(select));
+                    if (core.selectElectiveCourse(selected)) {
+                        System.out.println("选课成功 " + (selected.getRemain() - 1));
+                    } else {
+                        System.out.println("选课失败");
+                    }
                 } else if (select == -1) {
                     // -1 取消选课
                     break;
                 }
-
             }
             // 关闭流
             sr.close();
+            core.exitSystem();
+        } else {
+            System.out.println("error");
         }
-
 
     }
 

@@ -6,6 +6,7 @@ sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 compileJava {
     sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 }
+compileTestJava.options.encoding = 'UTF-8'
 compileJava.options.encoding = 'UTF-8'
 
 group = "moe.selector"
