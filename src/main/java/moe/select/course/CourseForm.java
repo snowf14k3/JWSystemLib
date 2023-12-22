@@ -20,16 +20,16 @@ public class CourseForm {
     /**
      * @param sEcho  不知道
      * @param start  开始的 索引值
-     * @param length 索引值+1 + length 就是显示的个数
+     * @param size 显示课程的个数
      */
-    public void putRequiredFormData(String sEcho, String start, String length) {
+    public void putRequiredFormData(String sEcho, int start, int size) {
         /*不知道是啥玩意*/
         this.putData("sEcho", sEcho);
         /* 必修固定11列*/
         this.putData("iColumns", "11");
         this.putData("sColumns", "");
-        this.putData("iDisplayStart", start);
-        this.putData("iDisplayLength", length);
+        this.putData("iDisplayStart", String.valueOf(start));
+        this.putData("iDisplayLength", String.valueOf(size));
         /* 下面对应每列的数据 */
         this.putData("mDataProp_0", "kch");
         this.putData("mDataProp_1", "kcmc");
@@ -47,16 +47,16 @@ public class CourseForm {
     /**
      * @param sEcho  不知道
      * @param start  开始的 索引值
-     * @param length 索引值+1 + length 就是显示的个数
+     * @param size 显示课程的个数
      */
-    public void putElectiveFormData(String sEcho, String start, String length) {
+    public void putElectiveFormData(String sEcho, int start, int size) {
         /*不知道是啥玩意*/
         this.putData("sEcho", sEcho);
         /* 选修固定13列*/
         this.putData("iColumns", "13");
         this.putData("sColumns", "");
-        this.putData("iDisplayStart", start);
-        this.putData("iDisplayLength", length);
+        this.putData("iDisplayStart", String.valueOf(start));
+        this.putData("iDisplayLength", String.valueOf(size));
         /* 下面对应每列的数据 */
         this.putData("mDataProp_0", "kch");
         this.putData("mDataProp_1", "kcmc");
@@ -79,7 +79,6 @@ public class CourseForm {
     public void clear(){
         this.formData.clear();
     }
-
 
     /**
      * 覆盖旧的map

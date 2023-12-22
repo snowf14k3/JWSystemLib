@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  *
  */
-public class JsonUtil {
+public class CourseHandler {
 
     // 新建json
     public static Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -61,7 +61,6 @@ public class JsonUtil {
                 } else {
                     course.setType(type.getAsString());
                 }
-
                 // 添加进list里
                 list.add(course);
             }

@@ -39,19 +39,6 @@ public class HttpUtil {
         }
     }
 
-    public static Connection.Response sendPost(String url, Map<String, String> headers, Map<String, String> form, Map<String, String> cookies) {
-        try {
-            return Jsoup.connect(url)
-                    .data(form).method(Connection.Method.POST)
-                    .followRedirects(false)
-                    .headers(headers)
-                    .cookies(cookies)
-                    .execute().charset("UTF-8");
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
     public static Connection.Response sendPost(String url, Map<String, String> form, Map<String, String> headers) {
         try {
             return Jsoup.connect(url)

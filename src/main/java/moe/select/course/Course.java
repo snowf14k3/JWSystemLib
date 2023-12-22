@@ -6,7 +6,7 @@ public class Course {
 
     private String area;
 
-    private String tearcher;
+    private String teacher;
 
     private String score;
     private String type;
@@ -32,7 +32,7 @@ public class Course {
     public Course(String kcid, String jxID, String tearcher) {
         this.kcid = kcid;
         this.jxID = jxID;
-        this.tearcher = tearcher;
+        this.teacher = tearcher;
     }
 
     public void setKCID(String kcid) {
@@ -47,8 +47,8 @@ public class Course {
         this.area = area;
     }
 
-    public void setTeacher(String tearcher) {
-        this.tearcher = tearcher;
+    public void setTeacher(String teacher) {
+        this.teacher = teacher;
     }
 
     public void setScore(String score) {
@@ -79,8 +79,8 @@ public class Course {
         return area;
     }
 
-    public String getTearcher() {
-        return tearcher;
+    public String getTeacher() {
+        return teacher;
     }
 
     public String getScore() {
@@ -105,7 +105,7 @@ public class Course {
                 "kcid='" + kcid + '\'' +
                 ", jxID='" + jxID + '\'' +
                 ", area='" + area + '\'' +
-                ", tearcher='" + tearcher + '\'' +
+                ", teacher='" + teacher + '\'' +
                 ", score='" + score + '\'' +
                 ", type='" + type + '\'' +
                 ", name='" + name + '\'' +
