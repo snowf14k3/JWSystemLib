@@ -19,6 +19,7 @@
 
 ---
 
-## 学习
+## 其他
 
 1. [各种请求的URL](https://github.com/ciallo-dev/CourseSelector/blob/master/src/main/java/moe/select/utils/URLConstants.java) 预览
+2. 代码为概念代码,需要clone更改使用

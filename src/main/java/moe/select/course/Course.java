@@ -1,4 +1,4 @@
-package moe.select.object;
+package moe.select.course;
 
 public class Course {
     private String kcid;

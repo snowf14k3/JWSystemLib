@@ -1,9 +1,9 @@
 package moe.select;
 
 
-import moe.select.list.CourseForm;
+import moe.select.course.CourseForm;
 
-import moe.select.object.Course;
+import moe.select.course.Course;
 import moe.select.utils.HttpUtil;
 import moe.select.utils.JsonUtil;
 import moe.select.utils.PasswordUtil;

@@ -1,4 +1,4 @@
-package moe.select.list;
+package moe.select.course;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
