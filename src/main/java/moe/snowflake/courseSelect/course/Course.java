@@ -17,6 +17,11 @@ public class Course {
     public Course(){
     }
 
+    public Course(String kcid, String jxID) {
+        this.kcid = kcid;
+        this.jxID = jxID;
+    }
+
     /**
      * =================
      * 参数默认值

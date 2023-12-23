@@ -9,7 +9,11 @@ import moe.snowflake.courseSelect.utils.CourseHandler;
 import moe.snowflake.courseSelect.utils.PasswordUtil;
 import moe.snowflake.courseSelect.utils.URLConstants;
 import org.jsoup.Connection;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.util.*;
 
 public class CourseSelectCore {
@@ -31,17 +35,19 @@ public class CourseSelectCore {
 
     /**
      * 判断教务是否登录成功
-     * @return
+     *
+     * @return 是否登录成功
      */
-    public boolean isJWLogged(){
+    public boolean isJWLogged() {
         return this.jwLoggedResponse != null && (this.jwLoggedResponse.statusCode() == 302 || this.jwLoggedResponse.statusCode() == 200);
     }
 
     /**
      * 判断选课系统是否登录成功
-     * @return
+     *
+     * @return 选课系统是否登录
      */
-    public boolean isCourseLogged(){
+    public boolean isCourseLogged() {
         return this.jwLoggedResponse != null && (this.jwLoggedResponse.statusCode() == 302 || this.jwLoggedResponse.statusCode() == 200) &&
                 this.courseSelectSystemResponse != null && this.courseSelectSystemResponse.statusCode() == 200;
     }
@@ -143,13 +149,65 @@ public class CourseSelectCore {
         // DEBUG INFO
         if (exitSelect != null && exitAll != null) {
             // 退出选课系统的response body
-            System.out.println(exitSelect.body());
+            if (exitSelect.body().contains("true")) System.out.println("退出选课系统成功");
             // 教务系统退出
-            System.out.println(exitAll.body());
+            if (exitAll.body().contains("jsxsd")) System.out.println("退出教务系统成功");
         } else {
             System.err.println("unknown error !");
         }
 
+    }
+
+    /**
+     * 获取当前已选选修课
+     * 横向排列,无格式化
+     */
+    public String getCurrentCourses() {
+        Connection.Response response = HttpUtil.sendGet(URLConstants.MY_COURSE_LIST, this.headers);
+
+        // 是否响应异常
+        if (response != null) {
+
+            try {
+                // 返回值转化成Document
+                Document document = response.parse();
+
+                Elements elements = document.getElementsByTag("table");
+                // 只有一个table
+                Element element = elements.first();
+
+                if (element != null){
+                    // 获取全部tr tag的标签下的子元素
+                    Elements trElements = element.getElementsByTag("tr");
+
+                    StringBuilder result = new StringBuilder();
+                    for (Element tr : trElements){
+                        // 拿两种
+                        Elements thElements = tr.getElementsByTag("th");
+                        Elements tdElements = tr.getElementsByTag("td");
+
+                        // 判断是否为课程详细的行
+                        if (thElements.isEmpty()){
+                            // 循环课程表的具体信息
+                            for (Element td : tdElements){
+                                result.append(td.ownText()).append(" ");
+                            }
+                        }else{
+                            // 循环课程表上的信息
+                            for (Element th : thElements){
+                                result.append(th.ownText()).append(" ");
+                            }
+                        }
+                        result.append("\n");
+                    }
+                    return result.toString();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return "null";
     }
 
     /**
@@ -171,8 +229,7 @@ public class CourseSelectCore {
     }
 
     /**
-     *
-     * @param url 选课的 URL
+     * @param url    选课的 URL
      * @param course 课程的id
      */
     private boolean selectCourse(String url, Course course) {
@@ -186,17 +243,20 @@ public class CourseSelectCore {
         // {"success":true,"message":"选课成功","jfViewStr":""}
         // {"success":[true,false],"message":"选课失败：此课堂选课人数已满！"}
 
-        String message = response.body();
-        if (message.contains("true")) {
-            return true;
-        } else if (message.contains("true,false")) {
-            return false;
+        if (response != null){
+            // 响应信息
+            String message = response.body();
+            if (message.contains("true")) {
+                return true;
+            } else if (message.contains("true,false")) {
+                return false;
+            }
         }
         return false;
     }
 
     /**
-     * 列出全部必修课
+     * 列出全部必修课,理论上必修选课最多课程不超过30个
      */
     public ArrayList<Course> searchAllRequiredList() {
         return searchRequiredList(30);
@@ -205,7 +265,7 @@ public class CourseSelectCore {
     /**
      * 列出必修课的列表
      *
-     * @param size
+     * @param size 显示课程大小
      */
     public ArrayList<Course> searchRequiredList(int size) {
         CourseForm cf = new CourseForm();
@@ -286,13 +346,12 @@ public class CourseSelectCore {
     }
 
     /**
-     *
      * @param removeFull     过滤已满课程
      * @param removeConflict 过滤冲突课程
      * @param loc            过滤限选课程
      * @return 筛选出的课程
      */
-    public ArrayList<Course> getElectiveCourseByStatement(boolean removeFull, boolean removeConflict, boolean loc){
+    public ArrayList<Course> getElectiveCourseByStatement(boolean removeFull, boolean removeConflict, boolean loc) {
         return this.searchElectiveList("", "", 0, "", removeFull, removeConflict, "", loc, 200);
     }
 

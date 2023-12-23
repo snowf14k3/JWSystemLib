@@ -163,4 +163,12 @@ public class URLConstants {
      */
     public static String MY_COURSE_LIST = "http://jw.gxstnu.edu.cn/jsxsd/xsxkjg/comeXkjglb";
 
+    /**
+     * 查找有哪些课程可评价
+     */
+    public static String EVALUATE_COURSE_FIND = "http://jw.gxstnu.edu.cn/jsxsd/xspj/xspj_find.do";
+
+
+
+
 }
