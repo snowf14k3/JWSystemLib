@@ -5,6 +5,9 @@ import org.jsoup.Jsoup;
 
 import java.util.Map;
 
+/**
+ * 引入jsoup的库，搭建的简单util
+ */
 public class HttpUtil {
     public static Connection.Response sendGet(String url) {
         try {

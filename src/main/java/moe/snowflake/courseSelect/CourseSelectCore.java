@@ -39,7 +39,16 @@ public class CourseSelectCore {
      * @return 是否登录成功
      */
     public boolean isJWLogged() {
-        return this.jwLoggedResponse != null && (this.jwLoggedResponse.statusCode() == 302 || this.jwLoggedResponse.statusCode() == 200);
+        try {
+            if (this.jwLoggedResponse != null) {
+                // 只要有这个元素即登录失败
+                Element element = this.jwLoggedResponse.parse().getElementById("showMsg");
+                if (element != null) return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -48,8 +57,12 @@ public class CourseSelectCore {
      * @return 选课系统是否登录
      */
     public boolean isCourseLogged() {
-        return this.jwLoggedResponse != null && (this.jwLoggedResponse.statusCode() == 302 || this.jwLoggedResponse.statusCode() == 200) &&
-                this.courseSelectSystemResponse != null && this.courseSelectSystemResponse.statusCode() == 200;
+        try {
+            return this.isJWLogged() &&
+                    this.courseSelectSystemResponse != null && !this.courseSelectSystemResponse.parse().title().contains("登录");
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     /**
@@ -101,6 +114,7 @@ public class CourseSelectCore {
      * @param username 账号
      * @param password 密码
      */
+    @Deprecated
     public void login1(String username, String password) {
         Connection.Response keyGet = HttpUtil.sendGet(URLConstants.LOGIN_DATA);
         if (keyGet != null && keyGet.statusCode() == 200) {
@@ -129,8 +143,12 @@ public class CourseSelectCore {
                 //  登录成功分发 cookie
                 this.jwLoggedResponse = ref;
 
-                this.setHeaders(ref.cookie("JSESSIONID"));
-                this.loginCourseWeb();
+                if (this.jwLoggedResponse != null) {
+                    this.setHeaders(ref.cookie("JSESSIONID"));
+                    this.loginCourseWeb();
+                } else {
+                    System.err.println("response error....");
+                }
             }
         } else {
             System.err.println("network error....");
@@ -158,11 +176,61 @@ public class CourseSelectCore {
 
     }
 
+
+    /**
+     * 获取自己已选课程的List
+     *
+     * @return
+     */
+    public ArrayList<Course> getCurrentCourses() {
+        ArrayList<Course> list = new ArrayList<>();
+        Connection.Response response = HttpUtil.sendGet(URLConstants.MY_COURSE_LIST, this.headers);
+
+        if (response != null) {
+            try {
+                // 返回值转化成Document
+                Document document = response.parse();
+
+                Elements elements = document.getElementsByTag("table");
+                // 只有一个table
+                Element element = elements.first();
+
+                if (element != null) {
+                    // 获取全部tr tag的标签下的子元素
+                    Elements trElements = element.getElementsByTag("tr");
+                    for (Element tr : trElements) {
+                        Elements tdElements = tr.getElementsByTag("td");
+                        if (tdElements.size() > 5) {
+                            Course course = new Course();
+                            course.setName(tdElements.get(1).ownText());
+                            course.setTeacher(tdElements.get(4).ownText());
+
+                            Element kcidElement = tr.getElementsByTag("a").first();
+                            if (kcidElement != null) {
+                                String KCID = kcidElement.attr("href")
+                                        .replace("');", "")
+                                        .replace("javascript:xstkOper('", "");
+                                course.setKCID(KCID);
+                            } else {
+                                continue;
+                            }
+                            list.add(course);
+                        }
+                    }
+                    return list;
+                }
+            } catch (Exception e) {
+                return list;
+            }
+        }
+        return list;
+    }
+
     /**
      * 获取当前已选选修课
      * 横向排列,无格式化
      */
-    public String getCurrentCourses() {
+    public String getCurrentCoursesStr() {
         Connection.Response response = HttpUtil.sendGet(URLConstants.MY_COURSE_LIST, this.headers);
 
         // 是否响应异常
@@ -176,25 +244,25 @@ public class CourseSelectCore {
                 // 只有一个table
                 Element element = elements.first();
 
-                if (element != null){
+                if (element != null) {
                     // 获取全部tr tag的标签下的子元素
                     Elements trElements = element.getElementsByTag("tr");
 
                     StringBuilder result = new StringBuilder();
-                    for (Element tr : trElements){
-                        // 拿两种
+                    for (Element tr : trElements) {
+                        // 拿三个
                         Elements thElements = tr.getElementsByTag("th");
                         Elements tdElements = tr.getElementsByTag("td");
 
                         // 判断是否为课程详细的行
-                        if (thElements.isEmpty()){
+                        if (thElements.isEmpty()) {
                             // 循环课程表的具体信息
-                            for (Element td : tdElements){
+                            for (Element td : tdElements) {
                                 result.append(td.ownText()).append(" ");
                             }
-                        }else{
+                        } else {
                             // 循环课程表上的信息
-                            for (Element th : thElements){
+                            for (Element th : thElements) {
                                 result.append(th.ownText()).append(" ");
                             }
                         }
@@ -203,11 +271,39 @@ public class CourseSelectCore {
                     return result.toString();
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                return "error";
             }
         }
 
         return "null";
+    }
+
+    /**
+     * 退出自己已选课程,建议搭配getCurrentCourses()使用.
+     * <p>
+     * {"success": true}
+     * <p>
+     * {"success":false,"message":"退课失败：此课堂未开放，不能进行退课！"}
+     * <p>
+     *
+     * @param course 课程实例
+     * @param reason 退课原因
+     */
+    public boolean exitSelectedCourse(Course course, String reason) {
+        Connection.Response exitSelectResponse = HttpUtil.sendGet(URLConstants.EXIT_COURSE
+                .replace("<jx0404id>", course.getJxID())
+                .replace("<reason>", reason), this.headers);
+
+        if (exitSelectResponse != null) {
+            // 退出选课判断
+            if (exitSelectResponse.body().contains("true")) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -243,7 +339,7 @@ public class CourseSelectCore {
         // {"success":true,"message":"选课成功","jfViewStr":""}
         // {"success":[true,false],"message":"选课失败：此课堂选课人数已满！"}
 
-        if (response != null){
+        if (response != null) {
             // 响应信息
             String message = response.body();
             if (message.contains("true")) {

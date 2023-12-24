@@ -17,31 +17,40 @@ public class Course {
     public Course(){
     }
 
+    /**
+     * 自行创建使用
+     * @param kcid 课程ID
+     * @param jxID jxID
+     */
     public Course(String kcid, String jxID) {
         this.kcid = kcid;
         this.jxID = jxID;
     }
 
     /**
-     * =================
-     * 参数默认值
-     * trjf:        投入积分
-     * xkzy:        选课志愿
-     * cfbs: null
-     * =================
      *
+     * <p>
+     * 参数默认值
+     * <p>
+     * trjf:        投入积分
+     * <p>
+     * xkzy:        选课志愿
+     * <p>
+     * cfbs: null
+     * <p>
      * @param kcid 课程ID jx02id
      * @param jxID jxID  jx0404id
-     * @param tearcher 老师 skls
+     * @param teacher 老师 skls
      */
-    public Course(String kcid, String jxID, String tearcher) {
+    public Course(String kcid, String jxID, String teacher) {
         this.kcid = kcid;
         this.jxID = jxID;
-        this.teacher = tearcher;
+        this.teacher = teacher;
     }
 
-    public void setKCID(String kcid) {
-        this.kcid = kcid;
+
+    public void setKCID(String KCID) {
+        this.kcid = KCID;
     }
 
     public void setJxID(String jxID) {

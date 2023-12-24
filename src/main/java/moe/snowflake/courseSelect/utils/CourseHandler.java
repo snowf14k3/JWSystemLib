@@ -17,12 +17,21 @@ public class CourseHandler {
     // 新建json
     public static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
+    /**
+     * 获取课程的全部个数
+     * @param json 服务器返回json数据
+     * @return
+     */
     public static String getTotalRecords(String json) {
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
         return jsonObject.get("iTotalRecords").getAsString();
     }
 
-
+    /**
+     *
+     * @param json 服务器返回json数据
+     * @return 实例化为course列表
+     */
     public static ArrayList<Course> getCourses(String json) {
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
 
