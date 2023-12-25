@@ -29,6 +29,12 @@
 
 ### 代码引入
 
+1. 你能够将此代码引入Android进行开发第三方的app
+
+2. 甚至你能使用它编写小脚本在termux的模拟环境下实现
+   
+   登录教务系统和选课等操作
+
 ```java
 public class Test{
    public static void main(String[] args) {
