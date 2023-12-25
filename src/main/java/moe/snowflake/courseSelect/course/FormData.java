@@ -4,16 +4,16 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class CourseForm {
+public class FormData {
 
     /* 表单所需数据 */
     private Map<String, String> formData;
 
-    public CourseForm() {
+    public FormData() {
         this.formData = new LinkedHashMap<>();
     }
 
-    public CourseForm(LinkedHashMap<String, String> newMap) {
+    public FormData(LinkedHashMap<String, String> newMap) {
         this.formData = newMap;
     }
 

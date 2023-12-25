@@ -9,7 +9,7 @@ compileJava {
 compileTestJava.options.encoding = 'UTF-8'
 compileJava.options.encoding = 'UTF-8'
 
-group = "moe.selector"
+group = "moe.snowflake"
 version = "1.0-SNAPSHOT"
 
 repositories {

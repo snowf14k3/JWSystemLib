@@ -1,5 +1,5 @@
 # (W.I.P) CourseSelect
-**这是一个支持广科师教务系统 | 评教 | 查课 | 抢课| 退课的第三方库**
+**这是一个支持 广科师教务系统实现 | 评教 | 查课 | 抢课| 退课的第三方库**
 
 ## 支持功能
 | 评教 | 查课 | 抢课 | 退课 |
@@ -33,29 +33,29 @@
 public class Test{
    public static void main(String[] args) {
       // 登录使用
-      CourseSelectCore core = new CourseSelectCore().login("username", "password");
+      JWSystem system = new JWSystem().login("username", "password");
       // 直接通过搜索获取全部的网课
-      ArrayList<Course> courses = core.getElectiveCourseByTeacher("网络课程");
+      ArrayList<Course> courses = system.getCourseSelectManager().getElectiveCourseByTeacher("网络课程");
       // 通过筛选获得course对象...
-      core.selectElectiveCourse(courses.get(select));
+      system.getCourseSelectManager().selectElectiveCourse(courses.get(select));
       // 其他API...自行阅读代码
    }
 
    /**
-    * KCID 每年都一样(就网络课程而言)
-    * JXID 每年都一样(就网络课程而言)
+    * KCID 每年都一样
+    * JXID 每年不固定
     * @param core 登录的instance
     */
-   public static void selectCourseByCreate(CourseSelectCore core){
+   public static void selectCourseByCreate(JWSystem core){
        Course course = new Course("kcid","jxid");
        
        // 选择选修课程
-       core.selectElectiveCourse(course);
+       system.getCourseSelectManager().selectElectiveCourse(course);
        
        // or
       
        // 选择必修课程
-       core.selectRequiredCourse(course);
+      system.getCourseSelectManager().selectRequiredCourse(course);
    }
    
 }
@@ -64,7 +64,8 @@ public class Test{
 ### 例子
 
 1. [选公共选修课程](https://github.com/ciallo-dev/CourseSelector/blob/master/src/test/java/TestElectiveCourse.java) 例子1
-2. [查询当前已选课程](https://github.com/ciallo-dev/CourseSelector/blob/master/src/test/java/TestMyCourse.java) 例子2
-3. [各种请求的URL详解](https://github.com/ciallo-dev/CourseSelector/blob/master/src/main/java/moe/snowflake/courseSelect/utils/URLConstants.java) 预览
+2. [查询已选课程,退课](https://github.com/ciallo-dev/CourseSelector/blob/master/src/test/java/TestMyCourse.java) 例子2
+3. [学生课程评价](https://github.com/ciallo-dev/CourseSelector/blob/master/src/test/java/TestCourseReview.java) 例子3
+4. [各种请求的URL详解](https://github.com/ciallo-dev/CourseSelector/blob/master/src/main/java/moe/snowflake/courseSelect/utils/URLConstants.java) 预览
 
 ---

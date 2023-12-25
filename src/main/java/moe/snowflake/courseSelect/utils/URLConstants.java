@@ -4,6 +4,11 @@ public class URLConstants {
     // ################### URL ###################
 
     /**
+     * HOST地址
+     */
+    public static String BASE_URL = "http://jw.gxstnu.edu.cn";
+
+    /**
      * METHOD:GET
      * <p>
      * 登录加密密钥
@@ -14,27 +19,20 @@ public class URLConstants {
      * <p>
      *  登录教务系统请求
      */
-    public static String LOGIN = "http://jw.gxstnu.edu.cn/Logon.do?method=logon";
+    public static String LOGIN2 = "http://jw.gxstnu.edu.cn/Logon.do?method=logon";
     /**
      * METHOD:POST
      * <p>
      * 使用 BASE64的登录数据
      */
-    public static String LOGIN2 = "http://jw.gxstnu.edu.cn/jsxsd/xk/LoginToXk";
+    public static String LOGIN = "http://jw.gxstnu.edu.cn/jsxsd/xk/LoginToXk";
 
     /**
      * METHOD:GET
      * <p>
      * 登录选课系统
      */
-    public static String COURSE_LOGIN = "http://jw.gxstnu.edu.cn/jsxsd/xsxk/xsxk_index?jx0502zbid=F17F6D4A35AF4EDA8727F42C3BCAF124";
-
-    /**
-     * METHOD:GET
-     * <p>
-     * 预先选课查询
-     */
-    public static String YXXSXK_WEB = "http://jw.gxstnu.edu.cn/jsxsd/xsxk/yxxsxk_index?jx0502zbid=F17F6D4A35AF4EDA8727F42C3BCAF124";
+    public static String COURSE_LOGIN_WEB = "http://jw.gxstnu.edu.cn/jsxsd/xsxk/xsxk_index?jx0502zbid=F17F6D4A35AF4EDA8727F42C3BCAF124";
 
     /**
      * METHOD:GET
@@ -297,7 +295,10 @@ public class URLConstants {
      * <p>
      * 查找有哪些课程可评价
      */
-    public static String EVALUATE_COURSE_FIND = "http://jw.gxstnu.edu.cn/jsxsd/xspj/xspj_find.do";
+    public static String REVIEW_COURSE_FIND = "http://jw.gxstnu.edu.cn/jsxsd/xspj/xspj_find.do";
+
+
+
 
 
 }

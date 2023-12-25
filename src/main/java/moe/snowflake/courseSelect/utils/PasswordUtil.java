@@ -3,11 +3,12 @@ package moe.snowflake.courseSelect.utils;
 public class PasswordUtil {
 
     /**
-     * 通过逆向网页js
+     * 通过逆向网页js,用于旧版登录..
      * @param dataStr 服务端获取的加密密钥
      * @param code 账号%%%密码
      * @return encoded 的数据
      */
+    @Deprecated
     public static String encodeUserInfo(String dataStr, String code) {
         StringBuilder encoded = new StringBuilder();
         String scode = dataStr.split("#")[0];

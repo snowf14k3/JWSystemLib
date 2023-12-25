@@ -1,190 +1,35 @@
-package moe.snowflake.courseSelect;
+package moe.snowflake.courseSelect.manager;
 
-
-import moe.snowflake.courseSelect.course.CourseForm;
-
+import moe.snowflake.courseSelect.JWSystem;
 import moe.snowflake.courseSelect.course.Course;
-import moe.snowflake.courseSelect.utils.HttpUtil;
+import moe.snowflake.courseSelect.course.FormData;
 import moe.snowflake.courseSelect.utils.CourseHandler;
-import moe.snowflake.courseSelect.utils.PasswordUtil;
+import moe.snowflake.courseSelect.utils.HttpUtil;
 import moe.snowflake.courseSelect.utils.URLConstants;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
-public class CourseSelectCore {
-    public static CourseSelectCore instance;
-    public Connection.Response jwLoggedResponse;
-    public Connection.Response courseSelectSystemResponse;
-    public Map<String, String> headers = new HashMap<>();
-    private final boolean selectCourse;
+public class CourseSelectManager {
+    private final JWSystem system;
 
-    public CourseSelectCore() {
-        instance = this;
-        this.selectCourse = true;
+
+    public CourseSelectManager(JWSystem system) {
+        this.system = system;
     }
-
-    public CourseSelectCore(boolean selectCourse) {
-        instance = this;
-        this.selectCourse = selectCourse;
-    }
-
-    /**
-     * 判断教务是否登录成功
-     *
-     * @return 是否登录成功
-     */
-    public boolean isJWLogged() {
-        try {
-            if (this.jwLoggedResponse != null) {
-                // 只要有这个元素即登录失败
-                Element element = this.jwLoggedResponse.parse().getElementById("showMsg");
-                if (element != null) return false;
-            }
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * 判断选课系统是否登录成功
-     *
-     * @return 选课系统是否登录
-     */
-    public boolean isCourseLogged() {
-        try {
-            return this.isJWLogged() &&
-                    this.courseSelectSystemResponse != null && !this.courseSelectSystemResponse.parse().title().contains("登录");
-        } catch (IOException e) {
-            return false;
-        }
-    }
-
-    /**
-     * 设置全局的 headers,包含cookie
-     * jsoup设置的cookie无法识别
-     *
-     * @param cookie cookie
-     */
-    private void setHeaders(String cookie) {
-        headers.put("Cookie", "JSESSIONID=" + cookie);
-    }
-
-    /**
-     * 直接导向目标API的登录
-     *
-     * @param username 用户名
-     * @param password 密码
-     */
-    public CourseSelectCore login(String username, String password) {
-        Map<String, String> formData = new HashMap<>();
-        formData.put("userAccount", username);
-        formData.put("userPassword", "");
-        formData.put("encoded", new String(Base64.getEncoder().encode(username.getBytes())) + "%%%" + new String(Base64.getEncoder().encode(password.getBytes())));
-
-        // 登录成功的 响应
-        Connection.Response response = HttpUtil.sendPost(URLConstants.LOGIN2, formData);
-        if (response != null) {
-            this.jwLoggedResponse = response;
-            this.setHeaders(response.cookie("JSESSIONID"));
-            this.loginCourseWeb();
-        } else {
-            System.err.println("network error...");
-        }
-        return this;
-    }
-
-    /**
-     * 用于直接登录选课系统
-     * 先登录学生选课系统,让后台存SESSIONID
-     * 并且设置登录成功的
-     */
-    public void loginCourseWeb() {
-        this.courseSelectSystemResponse = HttpUtil.sendGet(URLConstants.COURSE_LOGIN, this.headers);
-    }
-
-    /**
-     * 更慢的登录
-     *
-     * @param username 账号
-     * @param password 密码
-     */
-    @Deprecated
-    public void login1(String username, String password) {
-        Connection.Response keyGet = HttpUtil.sendGet(URLConstants.LOGIN_DATA);
-        if (keyGet != null && keyGet.statusCode() == 200) {
-            // 拿数据的
-            String dataStr = keyGet.body();
-
-            // 先检测他能否拿到加密数据的密钥
-            if (dataStr.split("#").length < 2) {
-                throw new RuntimeException("server or network error !");
-            }
-
-            // 获取加密后的密码数据
-            String encoded = PasswordUtil.encodeUserInfo(dataStr, username + "%%%" + password);
-            // 测试数据
-
-            Map<String, String> formData = new HashMap<>();
-            formData.put("userAccount", "");
-            formData.put("userPassword", "");
-            formData.put("encoded", encoded);
-
-            Connection.Response response = HttpUtil.sendPost(URLConstants.LOGIN, formData, this.headers);
-
-            if (response != null) {
-                // 重定向到 URLConstants.LOGIN2 + method= jwxt + ticqzket= token
-                Connection.Response ref = HttpUtil.sendGet(response.header("Location"));
-                //  登录成功分发 cookie
-                this.jwLoggedResponse = ref;
-
-                if (this.jwLoggedResponse != null) {
-                    this.setHeaders(ref.cookie("JSESSIONID"));
-                    this.loginCourseWeb();
-                } else {
-                    System.err.println("response error....");
-                }
-            }
-        } else {
-            System.err.println("network error....");
-        }
-    }
-
-    /**
-     * 退出系统使用
-     */
-    public void exitSystem() {
-        // 退出选课系统
-        Connection.Response exitSelect = HttpUtil.sendGet(URLConstants.EXIT_COURSE_WEB, this.headers);
-        // 退出JW整个系统
-        Connection.Response exitAll = HttpUtil.sendGet(URLConstants.EXIT_JWSYSTEM, this.headers);
-
-        // DEBUG INFO
-        if (exitSelect != null && exitAll != null) {
-            // 退出选课系统的response body
-            if (exitSelect.body().contains("true")) System.out.println("退出选课系统成功");
-            // 教务系统退出
-            if (exitAll.body().contains("jsxsd")) System.out.println("退出教务系统成功");
-        } else {
-            System.err.println("unknown error !");
-        }
-
-    }
-
 
     /**
      * 获取自己已选课程的List
      *
-     * @return
+     * @return 课程列表
      */
     public ArrayList<Course> getCurrentCourses() {
         ArrayList<Course> list = new ArrayList<>();
-        Connection.Response response = HttpUtil.sendGet(URLConstants.MY_COURSE_LIST, this.headers);
+        Connection.Response response = HttpUtil.sendGet(URLConstants.MY_COURSE_LIST, this.system.headers);
 
         if (response != null) {
             try {
@@ -200,13 +45,17 @@ public class CourseSelectCore {
                     Elements trElements = element.getElementsByTag("tr");
                     for (Element tr : trElements) {
                         Elements tdElements = tr.getElementsByTag("td");
+                        // 必定大于 5
                         if (tdElements.size() > 5) {
                             Course course = new Course();
+
+                            // 固定顺序
                             course.setName(tdElements.get(1).ownText());
                             course.setTeacher(tdElements.get(4).ownText());
 
                             Element kcidElement = tr.getElementsByTag("a").first();
                             if (kcidElement != null) {
+                                // 通过replaceKCID
                                 String KCID = kcidElement.attr("href")
                                         .replace("');", "")
                                         .replace("javascript:xstkOper('", "");
@@ -231,7 +80,7 @@ public class CourseSelectCore {
      * 横向排列,无格式化
      */
     public String getCurrentCoursesStr() {
-        Connection.Response response = HttpUtil.sendGet(URLConstants.MY_COURSE_LIST, this.headers);
+        Connection.Response response = HttpUtil.sendGet(URLConstants.MY_COURSE_LIST, this.system.headers);
 
         // 是否响应异常
         if (response != null) {
@@ -292,7 +141,7 @@ public class CourseSelectCore {
     public boolean exitSelectedCourse(Course course, String reason) {
         Connection.Response exitSelectResponse = HttpUtil.sendGet(URLConstants.EXIT_COURSE
                 .replace("<jx0404id>", course.getJxID())
-                .replace("<reason>", reason), this.headers);
+                .replace("<reason>", reason), this.system.headers);
 
         if (exitSelectResponse != null) {
             // 退出选课判断
@@ -330,10 +179,10 @@ public class CourseSelectCore {
      */
     private boolean selectCourse(String url, Course course) {
 
-        // 得事先登录学生选课系统,让后台存SESSIONID
+        // 得事先登录学生选课系统,让后台存JSESSIONID
         Connection.Response response = HttpUtil.sendGet(url
                 .replace("<kcid>", course.getKcid())
-                .replace("<jx0404id>", course.getJxID()), this.headers);
+                .replace("<jx0404id>", course.getJxID()), this.system.headers);
 
         //response
         // {"success":true,"message":"选课成功","jfViewStr":""}
@@ -364,12 +213,16 @@ public class CourseSelectCore {
      * @param size 显示课程大小
      */
     public ArrayList<Course> searchRequiredList(int size) {
-        CourseForm cf = new CourseForm();
+        FormData cf = new FormData();
         cf.putRequiredFormData("3", 0, size);
 
-        Connection.Response response = HttpUtil.sendPost(URLConstants.REQUIRED_COURSE_LIST, cf.getFormData(), this.headers);
+        Connection.Response response = HttpUtil.sendPost(URLConstants.REQUIRED_COURSE_LIST, cf.getFormData(), this.system.headers);
 
-        return CourseHandler.getCourses(response.body());
+        if (response != null) {
+            return CourseHandler.getCourses(response.body());
+        }
+
+        return new ArrayList<>();
     }
 
     /**
@@ -383,7 +236,7 @@ public class CourseSelectCore {
      * @param size           显示数量
      */
     public ArrayList<Course> searchElectiveList(String courseName, String teacher, int week, String section, boolean removeFull, boolean removeConflict, String courseType, boolean loc, int size) {
-        CourseForm cf = new CourseForm(new LinkedHashMap<>());
+        FormData cf = new FormData(new LinkedHashMap<>());
 
         String weekStr = "";
         if (week != 0) {
@@ -396,7 +249,7 @@ public class CourseSelectCore {
         String args = "?kcxx=" + courseName + "&skls=" + teacher + "&skxq=" + weekStr + "&skjc=" + section + "&sfym=" + removeFull + "&sfct=" + removeConflict + "&szjylb=" + courseType + "&sfxx=" + loc;
 
 
-        Connection.Response response = HttpUtil.sendPost(URLConstants.ELECTIVE_COURSE_LIST + args, cf.getFormData(), this.headers);
+        Connection.Response response = HttpUtil.sendPost(URLConstants.ELECTIVE_COURSE_LIST + args, cf.getFormData(), this.system.headers);
         if (response != null) {
             String emptyListJson = response.body();
             return CourseHandler.getCourses(emptyListJson);
@@ -449,10 +302,6 @@ public class CourseSelectCore {
      */
     public ArrayList<Course> getElectiveCourseByStatement(boolean removeFull, boolean removeConflict, boolean loc) {
         return this.searchElectiveList("", "", 0, "", removeFull, removeConflict, "", loc, 200);
-    }
-
-    public boolean isSelectCourse() {
-        return selectCourse;
     }
 
 }
