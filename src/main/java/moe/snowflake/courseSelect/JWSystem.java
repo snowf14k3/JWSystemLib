@@ -139,18 +139,20 @@ public class JWSystem {
 
             Connection.Response response = HttpUtil.sendPost(URLConstants.LOGIN2, formData, this.headers);
 
-            if (response != null) {
-                // 重定向到 URLConstants.LOGIN2 + method= jwxt + ticqzket= token
-                Connection.Response ref = HttpUtil.sendGet(response.header("Location"));
-                //  登录成功分发 cookie
-                this.jwLoggedResponse = ref;
+            if (response == null) {
+                throw new RuntimeException("network error !");
+            }
 
-                if (this.jwLoggedResponse != null) {
-                    this.setHeaders(ref.cookie("JSESSIONID"));
-                    this.loginCourseWeb();
-                } else {
-                    System.err.println("response error....");
-                }
+            // 重定向到 URLConstants.LOGIN2 + method= jwxt + ticqzket= token
+            Connection.Response ref = HttpUtil.sendGet(response.header("Location"));
+            //  登录成功分发 cookie
+            this.jwLoggedResponse = ref;
+
+            if (this.jwLoggedResponse != null) {
+                this.setHeaders(ref.cookie("JSESSIONID"));
+                this.loginCourseWeb();
+            } else {
+                System.err.println("response error....");
             }
         } else {
             System.err.println("network error....");

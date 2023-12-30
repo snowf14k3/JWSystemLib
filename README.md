@@ -70,7 +70,7 @@ public class Test{
 ### 例子
 
 1. [选公共选修课程](https://github.com/ciallo-dev/CourseSelector/blob/master/src/test/java/TestElectiveCourse.java) 例子1
-2. [查询已选课程,退课](https://github.com/ciallo-dev/CourseSelector/blob/master/src/test/java/TestMyCourse.java) 例子2
+2. [查已选课程,退课](https://github.com/ciallo-dev/CourseSelector/blob/master/src/test/java/TestMyCourse.java) 例子2
 3. [学生课程评价](https://github.com/ciallo-dev/CourseSelector/blob/master/src/test/java/TestCourseReview.java) 例子3
 4. [各种请求的URL详解](https://github.com/ciallo-dev/CourseSelector/blob/master/src/main/java/moe/snowflake/courseSelect/utils/URLConstants.java) 预览
 

@@ -2,8 +2,8 @@ package moe.snowflake.courseSelect.manager;
 
 import moe.snowflake.courseSelect.JWSystem;
 import moe.snowflake.courseSelect.course.Course;
-import moe.snowflake.courseSelect.course.FormData;
-import moe.snowflake.courseSelect.utils.CourseHandler;
+import moe.snowflake.courseSelect.course.FormMap;
+import moe.snowflake.courseSelect.utils.CourseDataHandler;
 import moe.snowflake.courseSelect.utils.HttpUtil;
 import moe.snowflake.courseSelect.utils.URLConstants;
 import org.jsoup.Connection;
@@ -11,8 +11,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 public class CourseSelectManager {
     private final JWSystem system;
@@ -27,50 +27,52 @@ public class CourseSelectManager {
      *
      * @return 课程列表
      */
-    public ArrayList<Course> getCurrentCourses() {
+    public ArrayList<Course> getCurrentCourses() throws IOException {
         ArrayList<Course> list = new ArrayList<>();
         Connection.Response response = HttpUtil.sendGet(URLConstants.MY_COURSE_LIST, this.system.headers);
 
-        if (response != null) {
-            try {
-                // 返回值转化成Document
-                Document document = response.parse();
+        if (response == null) {
+            throw new RuntimeException("response was null");
+        }
 
-                Elements elements = document.getElementsByTag("table");
-                // 只有一个table
-                Element element = elements.first();
+        // 返回值转化成Document
+        Document document = response.parse();
 
-                if (element != null) {
-                    // 获取全部tr tag的标签下的子元素
-                    Elements trElements = element.getElementsByTag("tr");
-                    for (Element tr : trElements) {
-                        Elements tdElements = tr.getElementsByTag("td");
-                        // 必定大于 5
-                        if (tdElements.size() > 5) {
-                            Course course = new Course();
+        Elements elements = document.getElementsByTag("table");
+        // 只有一个table
+        Element element = elements.first();
 
-                            // 固定顺序
-                            course.setName(tdElements.get(1).ownText());
-                            course.setTeacher(tdElements.get(4).ownText());
+        if (element == null) {
+            throw new RuntimeException("element not found !");
+        }
 
-                            Element kcidElement = tr.getElementsByTag("a").first();
-                            if (kcidElement != null) {
-                                // 通过replaceKCID
-                                String KCID = kcidElement.attr("href")
-                                        .replace("');", "")
-                                        .replace("javascript:xstkOper('", "");
-                                course.setKCID(KCID);
-                            } else {
-                                continue;
-                            }
-                            list.add(course);
-                        }
-                    }
-                    return list;
-                }
-            } catch (Exception e) {
-                return list;
+        // 获取全部tr tag的标签下的子元素
+        Elements trElements = element.getElementsByTag("tr");
+        for (Element tr : trElements) {
+            Elements tdElements = tr.getElementsByTag("td");
+            // 必定大于 5
+            // 这边不处理顶部的th元素检测
+            if (tdElements.size() < 5) {
+                continue;
             }
+            Course course = new Course();
+
+            // 固定顺序
+            course.setName(tdElements.get(1).ownText());
+            course.setTeacher(tdElements.get(4).ownText());
+
+            Element kcidElement = tr.getElementsByTag("a").first();
+
+            if (kcidElement == null) {
+                continue;
+            }
+
+            // 通过replaceKCID
+            String JXID = kcidElement.attr("href")
+                    .replace("');", "")
+                    .replace("javascript:xstkOper('", "");
+            course.setJxID(JXID);
+            list.add(course);
         }
         return list;
     }
@@ -83,48 +85,49 @@ public class CourseSelectManager {
         Connection.Response response = HttpUtil.sendGet(URLConstants.MY_COURSE_LIST, this.system.headers);
 
         // 是否响应异常
-        if (response != null) {
-
-            try {
-                // 返回值转化成Document
-                Document document = response.parse();
-
-                Elements elements = document.getElementsByTag("table");
-                // 只有一个table
-                Element element = elements.first();
-
-                if (element != null) {
-                    // 获取全部tr tag的标签下的子元素
-                    Elements trElements = element.getElementsByTag("tr");
-
-                    StringBuilder result = new StringBuilder();
-                    for (Element tr : trElements) {
-                        // 拿三个
-                        Elements thElements = tr.getElementsByTag("th");
-                        Elements tdElements = tr.getElementsByTag("td");
-
-                        // 判断是否为课程详细的行
-                        if (thElements.isEmpty()) {
-                            // 循环课程表的具体信息
-                            for (Element td : tdElements) {
-                                result.append(td.ownText()).append(" ");
-                            }
-                        } else {
-                            // 循环课程表上的信息
-                            for (Element th : thElements) {
-                                result.append(th.ownText()).append(" ");
-                            }
-                        }
-                        result.append("\n");
-                    }
-                    return result.toString();
-                }
-            } catch (Exception e) {
-                return "error";
-            }
+        if (response == null) {
+            throw new RuntimeException("response was null");
         }
 
-        return "null";
+        try {
+            // 返回值转化成Document
+            Document document = response.parse();
+
+            Elements elements = document.getElementsByTag("table");
+            // 只有一个table
+            Element element = elements.first();
+
+            if (element == null) {
+                throw new RuntimeException("element not found !");
+            }
+
+            // 获取全部tr tag的标签下的子元素
+            Elements trElements = element.getElementsByTag("tr");
+
+            StringBuilder result = new StringBuilder();
+            for (Element tr : trElements) {
+                // 拿三个
+                Elements thElements = tr.getElementsByTag("th");
+                Elements tdElements = tr.getElementsByTag("td");
+
+                // 判断是否为课程详细的行
+                if (thElements.isEmpty()) {
+                    // 循环课程表的具体信息
+                    for (Element td : tdElements) {
+                        result.append(td.ownText()).append(" ");
+                    }
+                } else {
+                    // 循环课程表上的信息
+                    for (Element th : thElements) {
+                        result.append(th.ownText()).append(" ");
+                    }
+                }
+                result.append("\n");
+            }
+            return result.toString();
+        } catch (Exception e) {
+            return "error";
+        }
     }
 
     /**
@@ -143,16 +146,11 @@ public class CourseSelectManager {
                 .replace("<jx0404id>", course.getJxID())
                 .replace("<reason>", reason), this.system.headers);
 
-        if (exitSelectResponse != null) {
-            // 退出选课判断
-            if (exitSelectResponse.body().contains("true")) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
+        if (exitSelectResponse == null) {
             return false;
         }
+        // 退出选课判断
+        return exitSelectResponse.body().contains("true");
     }
 
     /**
@@ -170,6 +168,8 @@ public class CourseSelectManager {
      * @param course 课程的对象
      */
     public boolean selectRequiredCourse(Course course) {
+        if (!course.getType().equals("P.E")) throw new RuntimeException("please call function  selectElectiveCourse !");
+
         return selectCourse(URLConstants.REQUIRED_COURSE_SELECT, course);
     }
 
@@ -187,23 +187,21 @@ public class CourseSelectManager {
         //response
         // {"success":true,"message":"选课成功","jfViewStr":""}
         // {"success":[true,false],"message":"选课失败：此课堂选课人数已满！"}
+        // {"success":false,"message":"选课失败：当前教学班已选择！"}
 
-        if (response != null) {
-            // 响应信息
-            String message = response.body();
-            if (message.contains("true")) {
-                return true;
-            } else if (message.contains("true,false")) {
-                return false;
-            }
+        // 必修课
+        //{"success":false,"message":"选课失败：当前课程已选择其它教学班！"}
+
+        if (response == null) {
+            return false;
         }
-        return false;
+        return !response.body().contains("false");
     }
 
     /**
      * 列出全部必修课,理论上必修选课最多课程不超过30个
      */
-    public ArrayList<Course> searchAllRequiredList() {
+    public ArrayList<Course> getAllRequiredList() {
         return searchRequiredList(30);
     }
 
@@ -213,13 +211,13 @@ public class CourseSelectManager {
      * @param size 显示课程大小
      */
     public ArrayList<Course> searchRequiredList(int size) {
-        FormData cf = new FormData();
-        cf.putRequiredFormData("3", 0, size);
+        FormMap formMap = new FormMap();
+        formMap.putRequiredFormData("3", 0, size);
 
-        Connection.Response response = HttpUtil.sendPost(URLConstants.REQUIRED_COURSE_LIST, cf.getFormData(), this.system.headers);
+        Connection.Response response = HttpUtil.sendPost(URLConstants.REQUIRED_COURSE_LIST, formMap, this.system.headers);
 
         if (response != null) {
-            return CourseHandler.getCourses(response.body());
+            return CourseDataHandler.getCourses(response.body());
         }
 
         return new ArrayList<>();
@@ -236,23 +234,23 @@ public class CourseSelectManager {
      * @param size           显示数量
      */
     public ArrayList<Course> searchElectiveList(String courseName, String teacher, int week, String section, boolean removeFull, boolean removeConflict, String courseType, boolean loc, int size) {
-        FormData cf = new FormData(new LinkedHashMap<>());
+        FormMap formMap = new FormMap();
 
         String weekStr = "";
         if (week != 0) {
             weekStr = String.valueOf(week);
         }
 
-        cf.putElectiveFormData("3", 0, size);
+        formMap.putElectiveFormData("3", 0, size);
 
         // 查询的参数
         String args = "?kcxx=" + courseName + "&skls=" + teacher + "&skxq=" + weekStr + "&skjc=" + section + "&sfym=" + removeFull + "&sfct=" + removeConflict + "&szjylb=" + courseType + "&sfxx=" + loc;
 
 
-        Connection.Response response = HttpUtil.sendPost(URLConstants.ELECTIVE_COURSE_LIST + args, cf.getFormData(), this.system.headers);
+        Connection.Response response = HttpUtil.sendPost(URLConstants.ELECTIVE_COURSE_LIST + args, formMap, this.system.headers);
         if (response != null) {
             String emptyListJson = response.body();
-            return CourseHandler.getCourses(emptyListJson);
+            return CourseDataHandler.getCourses(emptyListJson);
         }
         // 如果是网络原因返回空
         return new ArrayList<>();
