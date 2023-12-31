@@ -19,7 +19,7 @@ public class TestMyCourse {
 
             for (int i = 0; i < courses.size(); i++) {
                 Course course = courses.get(i);
-                // 输出课程名称 老师 kcid
+                // 输出课程名称 老师 jxid
                 System.out.printf("%s,%s,%s,%s%n", i+1,course.getName(), course.getTeacher(), course.getJxID());
             }
 

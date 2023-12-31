@@ -71,9 +71,11 @@ public class CourseDataHandler {
             // 类型
             JsonElement type = object.get("szkcflmc");
             if (type.isJsonNull()) {
-                course.setType("P.E.");
+                course.setType("Required");
+                course.setRequiredCourse(true);
             } else {
                 course.setType(type.getAsString());
+                course.setRequiredCourse(false);
             }
             // 添加进list里
             list.add(course);

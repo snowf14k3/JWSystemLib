@@ -21,9 +21,7 @@ public class JWSystem {
     private final CourseReviewManager courseReviewManager;
 
     public JWSystem() {
-        this.loginCourseSelectWeb = true;
-        this.courseSelectManager = new CourseSelectManager(this);
-        this.courseReviewManager = new CourseReviewManager(this);
+        this(true);
     }
 
     public JWSystem(boolean loginCourseSelectWeb) {
@@ -84,6 +82,7 @@ public class JWSystem {
         Map<String, String> formData = new HashMap<>();
         formData.put("userAccount", username);
         formData.put("userPassword", "");
+        // 很明显的两个base64加密
         formData.put("encoded", new String(Base64.getEncoder().encode(username.getBytes())) + "%%%" + new String(Base64.getEncoder().encode(password.getBytes())));
 
         // 登录成功的 响应
@@ -107,6 +106,14 @@ public class JWSystem {
         // 是否登录选课系统
         if (isLoginCourseSelectWeb()) {
             this.courseSelectSystemResponse = HttpUtil.sendGet(URLConstants.COURSE_LOGIN_WEB, this.headers);
+
+            if (this.courseSelectSystemResponse == null) {
+                System.out.println("network error !");
+                return;
+            }
+            // 检测是否在选课时间内
+            if (this.courseSelectSystemResponse.body().contains("时间范围")) this.courseSelectSystemResponse = null;
+
         }
     }
 

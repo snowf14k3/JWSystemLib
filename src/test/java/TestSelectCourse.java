@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class TestElectiveCourse {
+public class TestSelectCourse {
 
     @Test
     public void test() {
@@ -15,9 +15,9 @@ public class TestElectiveCourse {
         // 检测两个系统是否都登录了
         if (system.isCourseLogged()) {
             // 查找课程
-//            ArrayList<Course> courses = system.getCourseSelectManager().getAllElectiveCourse();
+            ArrayList<Course> courses = system.getCourseSelectManager().getAllElectiveCourse();
 //            ArrayList<Course> courses = system.getCourseSelectManager().getElectiveCourseByTeacher("网络课程");
-            ArrayList<Course> courses = system.getCourseSelectManager().getAllRequiredList();
+//            ArrayList<Course> courses = system.getCourseSelectManager().getAllRequiredList();
 
             for (int i = 0; i < courses.size(); i++) {
                 Course course = courses.get(i);
@@ -32,8 +32,9 @@ public class TestElectiveCourse {
                 if (select > 0 && select < courses.size()) {
                     Course selected = courses.get(select);
                     // 选择那个课程
-                    if (system.getCourseSelectManager().selectRequiredCourse(selected)) {
-                        System.out.println("选课成功 " + (selected.getRemain() - 1));
+                    if (system.getCourseSelectManager().selectCourse(selected)
+                    ) {
+                        System.out.println("选课成功 ");
                     } else {
                         System.out.println("选课失败");
                     }

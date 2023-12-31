@@ -297,8 +297,4 @@ public class URLConstants {
      */
     public static String REVIEW_COURSE_FIND = "http://jw.gxstnu.edu.cn/jsxsd/xspj/xspj_find.do";
 
-
-
-
-
 }

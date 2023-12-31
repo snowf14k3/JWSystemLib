@@ -54,18 +54,14 @@ public class Test{
    /**
     * KCID 每年都一样
     * JXID 每年不固定
-    * @param core 登录的instance
+    * @param system 登录的instance
     */
-   public static void selectCourseByCreate(JWSystem core){
+   public static void selectCourseByCreate(JWSystem system){
        Course course = new Course("kcid","jxid");
        
-       // 选择选修课程
-       system.getCourseSelectManager().selectElectiveCourse(course);
+       // 选择课程
+       boolean statement = system.getCourseSelectManager().selectCourse(course);
        
-       // or
-      
-       // 选择必修课程
-      system.getCourseSelectManager().selectRequiredCourse(course);
    }
    
 }
@@ -73,8 +69,8 @@ public class Test{
 
 ### 例子
 
-1. [选公共选修课程](https://github.com/ciallo-dev/JWSystemLib/blob/master/src/test/java/TestElectiveCourse.java) 例子1
-2. [查已选课程,退课](https://github.com/ciallo-dev/JWSystemLib/blob/master/src/test/java/TestMyCourse.java) 例子2
+1. [选课](https://github.com/ciallo-dev/JWSystemLib/blob/master/src/test/java/TestSelectCourse.java) 例子1
+2. [查已选课程退课](https://github.com/ciallo-dev/JWSystemLib/blob/master/src/test/java/TestMyCourse.java) 例子2
 3. [学生课程评价](https://github.com/ciallo-dev/JWSystemLib/blob/master/src/test/java/TestCourseReview.java) 例子3
 4. [各种请求的URL详解](https://github.com/ciallo-dev/JWSystemLib/blob/master/src/main/java/moe/snowflake/courseSelect/utils/URLConstants.java) 预览
 

@@ -3,16 +3,15 @@ package moe.snowflake.jwSystem.course;
 public class Course {
     private String kcid;
     private String jxID;
-
     private String area;
-
     private String teacher;
-
     private String score;
     private String type;
     private String name;
 
     private int remain;
+
+    private boolean isRequiredCourse;
 
     public Course(){
     }
@@ -48,6 +47,13 @@ public class Course {
         this.teacher = teacher;
     }
 
+    public boolean isRequiredCourse() {
+        return isRequiredCourse;
+    }
+
+    public void setRequiredCourse(boolean requiredCourse) {
+        isRequiredCourse = requiredCourse;
+    }
 
     public void setKCID(String KCID) {
         this.kcid = KCID;

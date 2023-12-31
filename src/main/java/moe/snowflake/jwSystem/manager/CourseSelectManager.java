@@ -155,24 +155,16 @@ public class CourseSelectManager {
         return exitSelectResponse.body().contains("true");
     }
 
-    /**
-     * 选择公共选修课
-     *
-     * @param course 课程对象
-     */
-    public boolean selectElectiveCourse(Course course) {
-        return selectCourse(URLConstants.ELECTIVE_COURSE_SELECT, course);
-    }
 
     /**
      * 选择公共必修课
-     *
+     * <p>
+     * 选择公共选修课
      * @param course 课程的对象
      */
-    public boolean selectRequiredCourse(Course course) {
-        if (!course.getType().equals("P.E")) throw new RuntimeException("please call function  selectElectiveCourse !");
-
-        return selectCourse(URLConstants.REQUIRED_COURSE_SELECT, course);
+    public boolean selectCourse(Course course) {
+        return course.isRequiredCourse() ? selectCourse(URLConstants.REQUIRED_COURSE_SELECT, course) :
+                selectCourse(URLConstants.ELECTIVE_COURSE_SELECT, course);
     }
 
     /**
