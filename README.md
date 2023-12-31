@@ -1,5 +1,5 @@
-# (W.I.P) JWSystem
-**这是一个支持 广科师教务系统实现 | 评教 | 查课 | 抢课| 退课的第三方库**
+# JWSystem (W.I.P)
+_**这是一个支持 广科师教务系统实现 | 评教 | 查课 | 抢课| 退课的第三方库**_
 
 ## 支持功能
 | 评教 | 查课 | 抢课 | 退课 |
@@ -26,6 +26,10 @@
 ---
 
 ## 如何使用
+
+本lib就不上传至maven仓库了,需要使用请前往
+[releases](https://github.com/ciallo-dev/JWSystemLib/releases)
+下载使用
 
 ### 代码引入
 
@@ -69,9 +73,9 @@ public class Test{
 
 ### 例子
 
-1. [选公共选修课程](https://github.com/ciallo-dev/CourseSelector/blob/master/src/test/java/TestElectiveCourse.java) 例子1
-2. [查已选课程,退课](https://github.com/ciallo-dev/CourseSelector/blob/master/src/test/java/TestMyCourse.java) 例子2
-3. [学生课程评价](https://github.com/ciallo-dev/CourseSelector/blob/master/src/test/java/TestCourseReview.java) 例子3
-4. [各种请求的URL详解](https://github.com/ciallo-dev/CourseSelector/blob/master/src/main/java/moe/snowflake/courseSelect/utils/URLConstants.java) 预览
+1. [选公共选修课程](https://github.com/ciallo-dev/JWSystemLib/blob/master/src/test/java/TestElectiveCourse.java) 例子1
+2. [查已选课程,退课](https://github.com/ciallo-dev/JWSystemLib/blob/master/src/test/java/TestMyCourse.java) 例子2
+3. [学生课程评价](https://github.com/ciallo-dev/JWSystemLib/blob/master/src/test/java/TestCourseReview.java) 例子3
+4. [各种请求的URL详解](https://github.com/ciallo-dev/JWSystemLib/blob/master/src/main/java/moe/snowflake/courseSelect/utils/URLConstants.java) 预览
 
 ---
