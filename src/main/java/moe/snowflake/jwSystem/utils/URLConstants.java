@@ -1,4 +1,4 @@
-package moe.snowflake.courseSelect.utils;
+package moe.snowflake.jwSystem.utils;
 
 public class URLConstants {
     // ################### URL ###################

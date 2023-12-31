@@ -1,11 +1,11 @@
-package moe.snowflake.courseSelect.manager;
+package moe.snowflake.jwSystem.manager;
 
-import moe.snowflake.courseSelect.JWSystem;
-import moe.snowflake.courseSelect.course.Course;
-import moe.snowflake.courseSelect.course.FormMap;
-import moe.snowflake.courseSelect.utils.CourseDataHandler;
-import moe.snowflake.courseSelect.utils.HttpUtil;
-import moe.snowflake.courseSelect.utils.URLConstants;
+import moe.snowflake.jwSystem.JWSystem;
+import moe.snowflake.jwSystem.course.Course;
+import moe.snowflake.jwSystem.course.FormMap;
+import moe.snowflake.jwSystem.utils.CourseDataHandler;
+import moe.snowflake.jwSystem.utils.HttpUtil;
+import moe.snowflake.jwSystem.utils.URLConstants;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -111,12 +111,14 @@ public class CourseSelectManager {
                 Elements tdElements = tr.getElementsByTag("td");
 
                 // 判断是否为课程详细的行
-                if (thElements.isEmpty()) {
+                if (!tdElements.isEmpty()) {
                     // 循环课程表的具体信息
                     for (Element td : tdElements) {
                         result.append(td.ownText()).append(" ");
                     }
-                } else {
+                }
+
+                if (!thElements.isEmpty()) {
                     // 循环课程表上的信息
                     for (Element th : thElements) {
                         result.append(th.ownText()).append(" ");

@@ -1,15 +1,15 @@
-package moe.snowflake.courseSelect.utils;
+package moe.snowflake.jwSystem.utils;
 
 public class PasswordUtil {
 
     /**
-     * 通过逆向网页js,用于旧版登录..
+     * 通过逆向网页js,用于教务处方式进入的教务系统登录.
      * @param dataStr 服务端获取的加密密钥
      * @param code 账号%%%密码
      * @return encoded 的数据
      */
     @Deprecated
-    public static String encodeUserInfo(String dataStr, String code) {
+    public static String encodeUserData(String dataStr, String code) {
         StringBuilder encoded = new StringBuilder();
         String scode = dataStr.split("#")[0];
         String sxh = dataStr.split("#")[1];

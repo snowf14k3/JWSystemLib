@@ -1,7 +1,7 @@
-package moe.snowflake.courseSelect.utils;
+package moe.snowflake.jwSystem.utils;
 
 import com.google.gson.*;
-import moe.snowflake.courseSelect.course.Course;
+import moe.snowflake.jwSystem.course.Course;
 
 import java.util.ArrayList;
 
@@ -71,7 +71,7 @@ public class CourseDataHandler {
             // 类型
             JsonElement type = object.get("szkcflmc");
             if (type.isJsonNull()) {
-                course.setType("P.E");
+                course.setType("P.E.");
             } else {
                 course.setType(type.getAsString());
             }

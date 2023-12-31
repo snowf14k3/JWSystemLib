@@ -1,8 +1,8 @@
-package moe.snowflake.courseSelect.manager;
+package moe.snowflake.jwSystem.manager;
 
-import moe.snowflake.courseSelect.JWSystem;
-import moe.snowflake.courseSelect.utils.HttpUtil;
-import moe.snowflake.courseSelect.utils.URLConstants;
+import moe.snowflake.jwSystem.JWSystem;
+import moe.snowflake.jwSystem.utils.HttpUtil;
+import moe.snowflake.jwSystem.utils.URLConstants;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -24,8 +24,7 @@ public class CourseReviewManager {
      * 查询目前已有学生课程评价
      * @return 评价表格数据
      */
-    public String findAllCourseReview() {
-
+    public String getAllCourseReview() {
         Connection.Response response = HttpUtil.sendGet(URLConstants.REVIEW_COURSE_FIND, this.system.headers);
 
         // 不读取 th 标签的数据
@@ -71,7 +70,6 @@ public class CourseReviewManager {
                 if (hrefElements != null) {
                     sb.append(URLConstants.BASE_URL).append(hrefElements.attr("href"));
                 }
-
                 // 换行
                 sb.append("\n");
             }

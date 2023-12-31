@@ -1,5 +1,5 @@
-import moe.snowflake.courseSelect.JWSystem;
-import moe.snowflake.courseSelect.course.Course;
+import moe.snowflake.jwSystem.JWSystem;
+import moe.snowflake.jwSystem.course.Course;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

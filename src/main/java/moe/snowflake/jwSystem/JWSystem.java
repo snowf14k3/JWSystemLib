@@ -1,11 +1,11 @@
-package moe.snowflake.courseSelect;
+package moe.snowflake.jwSystem;
 
 
-import moe.snowflake.courseSelect.manager.CourseSelectManager;
-import moe.snowflake.courseSelect.manager.CourseReviewManager;
-import moe.snowflake.courseSelect.utils.HttpUtil;
-import moe.snowflake.courseSelect.utils.PasswordUtil;
-import moe.snowflake.courseSelect.utils.URLConstants;
+import moe.snowflake.jwSystem.manager.CourseSelectManager;
+import moe.snowflake.jwSystem.manager.CourseReviewManager;
+import moe.snowflake.jwSystem.utils.HttpUtil;
+import moe.snowflake.jwSystem.utils.PasswordUtil;
+import moe.snowflake.jwSystem.utils.URLConstants;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Element;
 
@@ -129,7 +129,7 @@ public class JWSystem {
             }
 
             // 获取加密后的密码数据
-            String encoded = PasswordUtil.encodeUserInfo(dataStr, username + "%%%" + password);
+            String encoded = PasswordUtil.encodeUserData(dataStr, username + "%%%" + password);
             // 测试数据
 
             Map<String, String> formData = new HashMap<>();
@@ -174,10 +174,9 @@ public class JWSystem {
             if (exitSelect.body().contains("true")) System.out.println("退出选课系统成功");
             // 教务系统退出
             if (exitAll.body().contains("jsxsd")) System.out.println("退出教务系统成功");
-        } else {
-            System.err.println("unknown error !");
+            return;
         }
-
+        System.err.println("unknown error !");
     }
 
     public boolean isLoginCourseSelectWeb() {

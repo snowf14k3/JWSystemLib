@@ -1,4 +1,4 @@
-package moe.snowflake.courseSelect.course;
+package moe.snowflake.jwSystem.course;
 
 public class Course {
     private String kcid;
