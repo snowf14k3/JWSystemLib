@@ -65,5 +65,10 @@ public class FormMap extends LinkedHashMap<String,String> {
         this.put("mDataProp_11", "szkcflmc");
         this.put("mDataProp_12", "czOper");
     }
-    
+
+    public void putCourseReviewSave(){
+        // WIP
+    }
+
+
 }

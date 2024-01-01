@@ -47,7 +47,7 @@ public class Test{
       // 直接通过搜索获取全部的网课
       ArrayList<Course> courses = system.getCourseSelectManager().getElectiveCourseByTeacher("网络课程");
       // 通过筛选获得course对象...
-      system.getCourseSelectManager().selectElectiveCourse(courses.get(select));
+      system.getCourseSelectManager().selectCourse(courses.get(select));
       // 其他API...自行阅读代码
    }
 
