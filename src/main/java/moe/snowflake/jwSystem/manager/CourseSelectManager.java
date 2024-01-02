@@ -5,7 +5,6 @@ import moe.snowflake.jwSystem.course.Course;
 import moe.snowflake.jwSystem.course.FormMap;
 import moe.snowflake.jwSystem.utils.CourseDataHandler;
 import moe.snowflake.jwSystem.utils.HttpUtil;
-import moe.snowflake.jwSystem.utils.URLConstants;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -29,7 +28,7 @@ public class CourseSelectManager {
      */
     public ArrayList<Course> getCurrentCourses() throws IOException {
         ArrayList<Course> list = new ArrayList<>();
-        Connection.Response response = HttpUtil.sendGet(URLConstants.MY_COURSE_LIST, this.system.headers);
+        Connection.Response response = HttpUtil.sendGet(URLManager.MY_COURSE_LIST, this.system.headers);
 
         if (response == null) {
             throw new RuntimeException("response was null");
@@ -82,7 +81,7 @@ public class CourseSelectManager {
      * 横向排列,无格式化
      */
     public String getCurrentCoursesStr() {
-        Connection.Response response = HttpUtil.sendGet(URLConstants.MY_COURSE_LIST, this.system.headers);
+        Connection.Response response = HttpUtil.sendGet(URLManager.MY_COURSE_LIST, this.system.headers);
 
         // 是否响应异常
         if (response == null) {
@@ -144,7 +143,7 @@ public class CourseSelectManager {
      * @param reason 退课原因
      */
     public boolean exitSelectedCourse(Course course, String reason) {
-        Connection.Response exitSelectResponse = HttpUtil.sendGet(URLConstants.EXIT_COURSE
+        Connection.Response exitSelectResponse = HttpUtil.sendGet(URLManager.EXIT_COURSE
                 .replace("<jx0404id>", course.getJxID())
                 .replace("<reason>", reason), this.system.headers);
 
@@ -163,8 +162,8 @@ public class CourseSelectManager {
      * @param course 课程的对象
      */
     public boolean selectCourse(Course course) {
-        return course.isRequiredCourse() ? selectCourse(URLConstants.REQUIRED_COURSE_SELECT, course) :
-                selectCourse(URLConstants.ELECTIVE_COURSE_SELECT, course);
+        return course.isRequiredCourse() ? selectCourse(URLManager.REQUIRED_COURSE_SELECT, course) :
+                selectCourse(URLManager.ELECTIVE_COURSE_SELECT, course);
     }
 
     /**
@@ -208,7 +207,7 @@ public class CourseSelectManager {
         FormMap formMap = new FormMap();
         formMap.putRequiredFormData("3", 0, size);
 
-        Connection.Response response = HttpUtil.sendPost(URLConstants.REQUIRED_COURSE_LIST, formMap, this.system.headers);
+        Connection.Response response = HttpUtil.sendPost(URLManager.REQUIRED_COURSE_LIST, formMap, this.system.headers);
 
         if (response != null) {
             return CourseDataHandler.getCourses(response.body());
@@ -241,7 +240,7 @@ public class CourseSelectManager {
         String args = "?kcxx=" + courseName + "&skls=" + teacher + "&skxq=" + weekStr + "&skjc=" + section + "&sfym=" + removeFull + "&sfct=" + removeConflict + "&szjylb=" + courseType + "&sfxx=" + loc;
 
 
-        Connection.Response response = HttpUtil.sendPost(URLConstants.ELECTIVE_COURSE_LIST + args, formMap, this.system.headers);
+        Connection.Response response = HttpUtil.sendPost(URLManager.ELECTIVE_COURSE_LIST + args, formMap, this.system.headers);
         if (response != null) {
             String emptyListJson = response.body();
             return CourseDataHandler.getCourses(emptyListJson);

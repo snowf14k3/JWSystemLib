@@ -1,5 +1,5 @@
 import moe.snowflake.jwSystem.JWSystem;
-import moe.snowflake.jwSystem.utils.URLConstants;
+import moe.snowflake.jwSystem.manager.URLManager;
 import org.junit.jupiter.api.Test;
 
 public class TestCourseReview {
@@ -8,7 +8,7 @@ public class TestCourseReview {
     @Test
     public void testReview() {
         // 使用备用路线登录
-        URLConstants.useBackupLoginServer();
+        URLManager.useBackupLoginServer(2);
 
         JWSystem system = new JWSystem(false).login("username","password");
 

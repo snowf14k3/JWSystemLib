@@ -2,7 +2,6 @@ package moe.snowflake.jwSystem.manager;
 
 import moe.snowflake.jwSystem.JWSystem;
 import moe.snowflake.jwSystem.utils.HttpUtil;
-import moe.snowflake.jwSystem.utils.URLConstants;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -25,7 +24,7 @@ public class CourseReviewManager {
      * @return 评价表格数据
      */
     public String getAllCourseReview() {
-        Connection.Response response = HttpUtil.sendGet(URLConstants.REVIEW_COURSE_FIND, this.system.headers);
+        Connection.Response response = HttpUtil.sendGet(URLManager.REVIEW_COURSE_FIND, this.system.headers);
 
         // 不读取 th 标签的数据
         StringBuilder sb = new StringBuilder("序号,学年学期,评价分类,评价批次,开始时间,结束时间\n");
@@ -68,7 +67,7 @@ public class CourseReviewManager {
                 Element hrefElements = aElements.first();
 
                 if (hrefElements != null) {
-                    sb.append(URLConstants.BASE_URL).append(hrefElements.attr("href"));
+                    sb.append(URLManager.BASE_URL).append(hrefElements.attr("href"));
                 }
                 // 换行
                 sb.append("\n");

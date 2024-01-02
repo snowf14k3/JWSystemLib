@@ -1,10 +1,28 @@
-package moe.snowflake.jwSystem.utils;
+package moe.snowflake.jwSystem.manager;
 
-public class URLConstants {
+public class URLManager {
     // ################### URL ###################
 
-    public static void useBackupLoginServer(){
-        URLConstants.BASE_URL = URLConstants.BASE_URL2;
+    /**
+     * 使用内网服务器
+     */
+    public static void useBackupLoginServer(int mode){
+        switch (mode){
+            case 1:
+                BASE_URL = BACKUP_SERVER1;
+                break;
+            case 2:
+                BASE_URL = BACKUP_SERVER2;
+                break;
+            case 3:
+                BASE_URL = BACKUP_SERVER3;
+                break;
+            case 4:
+                BASE_URL = BACKUP_SERVER4;
+            default:
+                System.err.println("error ..");
+                break;
+        }
     }
 
     /**
@@ -13,9 +31,24 @@ public class URLConstants {
     public static String BASE_URL = "http://jw.gxstnu.edu.cn";
 
     /**
-     * 备用服务器
+     * 备用内网服务器1
      */
-    public static String BASE_URL2 = "http://172.20.0.73:80";
+    public static String BACKUP_SERVER1 = "http://172.20.0.72:80";
+
+    /**
+     * 备用内网服务器2
+     */
+    public static String BACKUP_SERVER2 = "http://172.20.0.73:80";
+
+    /**
+     * 备用内网服务器3
+     */
+    public static String BACKUP_SERVER3 = "http://172.20.0.74:80";
+
+    /**
+     * 备用内网服务器4
+     */
+    public static String BACKUP_SERVER4 = "http://172.20.0.75:80";
 
     /**
      * METHOD:GET

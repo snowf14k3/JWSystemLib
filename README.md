@@ -42,6 +42,8 @@ _**这是一个支持 广科师教务系统实现 | 评教 | 查课 | 抢课| �
 ```java
 public class Test{
    public static void main(String[] args) {
+      // 使用内网第二条备用路线登录
+      URLManager.useBackupLoginServer(2);
       // 登录使用
       JWSystem system = new JWSystem().login("username", "password");
       // 直接通过搜索获取全部的网课

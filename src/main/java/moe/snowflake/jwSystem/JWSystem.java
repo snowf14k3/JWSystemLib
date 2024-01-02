@@ -3,9 +3,9 @@ package moe.snowflake.jwSystem;
 
 import moe.snowflake.jwSystem.manager.CourseSelectManager;
 import moe.snowflake.jwSystem.manager.CourseReviewManager;
+import moe.snowflake.jwSystem.manager.URLManager;
 import moe.snowflake.jwSystem.utils.HttpUtil;
 import moe.snowflake.jwSystem.utils.PasswordUtil;
-import moe.snowflake.jwSystem.utils.URLConstants;
 import org.jsoup.Connection;
 import org.jsoup.nodes.Element;
 
@@ -86,7 +86,7 @@ public class JWSystem {
         formData.put("encoded", new String(Base64.getEncoder().encode(username.getBytes())) + "%%%" + new String(Base64.getEncoder().encode(password.getBytes())));
 
         // 登录成功的 响应
-        Connection.Response response = HttpUtil.sendPost(URLConstants.LOGIN, formData);
+        Connection.Response response = HttpUtil.sendPost(URLManager.LOGIN, formData);
         if (response != null) {
             this.jwLoggedResponse = response;
             this.setHeaders(response.cookie("JSESSIONID"));
@@ -105,7 +105,7 @@ public class JWSystem {
     public void loginCourseWeb() {
         // 是否登录选课系统
         if (isLoginCourseSelectWeb()) {
-            this.courseSelectSystemResponse = HttpUtil.sendGet(URLConstants.COURSE_LOGIN_WEB, this.headers);
+            this.courseSelectSystemResponse = HttpUtil.sendGet(URLManager.COURSE_LOGIN_WEB, this.headers);
 
             if (this.courseSelectSystemResponse == null) {
                 System.out.println("network error !");
@@ -125,7 +125,7 @@ public class JWSystem {
      */
     @Deprecated
     public void login1(String username, String password) {
-        Connection.Response keyGet = HttpUtil.sendGet(URLConstants.LOGIN_DATA);
+        Connection.Response keyGet = HttpUtil.sendGet(URLManager.LOGIN_DATA);
         if (keyGet != null && keyGet.statusCode() == 200) {
             // 拿数据的
             String dataStr = keyGet.body();
@@ -144,13 +144,13 @@ public class JWSystem {
             formData.put("userPassword", "");
             formData.put("encoded", encoded);
 
-            Connection.Response response = HttpUtil.sendPost(URLConstants.LOGIN2, formData, this.headers);
+            Connection.Response response = HttpUtil.sendPost(URLManager.LOGIN2, formData, this.headers);
 
             if (response == null) {
                 throw new RuntimeException("network error !");
             }
 
-            // 重定向到 URLConstants.LOGIN2 + method= jwxt + ticqzket= token
+            // 重定向到 URLManager.LOGIN2 + method= jwxt + ticqzket= token
             Connection.Response ref = HttpUtil.sendGet(response.header("Location"));
             //  登录成功分发 cookie
             this.jwLoggedResponse = ref;
@@ -171,9 +171,9 @@ public class JWSystem {
      */
     public void exitSystem() {
         // 退出选课系统
-        Connection.Response exitSelect = HttpUtil.sendGet(URLConstants.EXIT_COURSE_WEB, this.headers);
+        Connection.Response exitSelect = HttpUtil.sendGet(URLManager.EXIT_COURSE_WEB, this.headers);
         // 退出JW整个系统
-        Connection.Response exitAll = HttpUtil.sendGet(URLConstants.EXIT_JWSYSTEM, this.headers);
+        Connection.Response exitAll = HttpUtil.sendGet(URLManager.EXIT_JWSYSTEM, this.headers);
 
         // DEBUG INFO
         if (exitSelect != null && exitAll != null) {
