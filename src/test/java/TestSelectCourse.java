@@ -45,7 +45,7 @@ public class TestSelectCourse {
             }
             //关闭流
             sr.close();
-            system.exitSystem();
+            system.exit();
         } else {
             System.out.println("error");
         }

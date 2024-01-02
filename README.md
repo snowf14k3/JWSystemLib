@@ -9,7 +9,7 @@ _**这是一个支持 广科师教务系统实现 | 评教 | 查课 | 抢课| �
 ## 声明
 1. 本项目使用 `MIT License`,根据协议允许您进行任意修改/发布/传播,且造成后果与本项目无关.
 2. 特别感谢<a href="https://www.jetbrains.com"> JetBrains </a>  与 <a href="https://jsoup.org/"> JSoup </a>对这个项目的支持。
-3. 本项目仅为实现教务系统一些功能,本项目不推荐商用.
+3. 本项目仅为实现教务系统一些功能,不提供编写好的程序,且本项目不推荐商用.
 ---
 
 ## 由来和吐槽
@@ -17,7 +17,7 @@ _**这是一个支持 广科师教务系统实现 | 评教 | 查课 | 抢课| �
 
     减少对服务器发数据,虽说也没啥用,不过总比无限套娃
 
-    的登录页面好.因此干脆就直接写一套流程的API库
+    的登录页面好.干脆就直接写一套流程的API库
 
 2. 这个教务系统我不做评价,在请求分析过程中遇到的变量名
 
@@ -74,6 +74,6 @@ public class Test{
 1. [选课](https://github.com/ciallo-dev/JWSystemLib/blob/master/src/test/java/TestSelectCourse.java) 例子1
 2. [查已选课程退课](https://github.com/ciallo-dev/JWSystemLib/blob/master/src/test/java/TestMyCourse.java) 例子2
 3. [学生课程评价](https://github.com/ciallo-dev/JWSystemLib/blob/master/src/test/java/TestCourseReview.java) 例子3
-4. [各种请求的URL详解](https://github.com/ciallo-dev/JWSystemLib/blob/master/src/main/java/moe/snowflake/courseSelect/utils/URLConstants.java) 预览
+4. [各种请求的URL详解](https://github.com/ciallo-dev/JWSystemLib/blob/master/src/main/java/moe/snowflake/jwSystem/manager/URLManager.java) 预览
 
 ---

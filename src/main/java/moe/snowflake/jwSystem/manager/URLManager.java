@@ -20,7 +20,7 @@ public class URLManager {
             case 4:
                 BASE_URL = BACKUP_SERVER4;
             default:
-                System.err.println("error ..");
+                System.err.println("error while switching backup server ..");
                 break;
         }
     }

@@ -15,7 +15,7 @@ public class TestCourseReview {
         // W.I.P
         if (system.isJWLogged()) {
             System.out.println(system.getCourseReviewManager().getAllCourseReview());
-            system.exitSystem();
+            system.exit();
         }
     }
 

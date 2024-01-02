@@ -45,7 +45,7 @@ public class TestMyCourse {
             //关闭流
             sr.close();
             // 退出系统
-            system.exitSystem();
+            system.exit();
         } else {
             System.err.println("登录失败");
         }

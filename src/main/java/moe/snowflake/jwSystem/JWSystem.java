@@ -169,7 +169,7 @@ public class JWSystem {
     /**
      * 退出系统使用
      */
-    public void exitSystem() {
+    public void exit() {
         // 退出选课系统
         Connection.Response exitSelect = HttpUtil.sendGet(URLManager.EXIT_COURSE_WEB, this.headers);
         // 退出JW整个系统
