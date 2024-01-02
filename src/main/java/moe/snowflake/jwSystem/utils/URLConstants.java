@@ -3,10 +3,19 @@ package moe.snowflake.jwSystem.utils;
 public class URLConstants {
     // ################### URL ###################
 
+    public static void useBackupLoginServer(){
+        URLConstants.BASE_URL = URLConstants.BASE_URL2;
+    }
+
     /**
      * HOST地址
      */
     public static String BASE_URL = "http://jw.gxstnu.edu.cn";
+
+    /**
+     * 备用服务器
+     */
+    public static String BASE_URL2 = "http://172.20.0.73:80";
 
     /**
      * METHOD:GET
