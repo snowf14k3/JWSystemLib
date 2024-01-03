@@ -1,5 +1,5 @@
 # JWSystem (W.I.P)
-_**这是一个支持 广科师教务系统实现 | 评教 | 查课 | 抢课| 退课的第三方库**_
+_**这是一个支持 广科师(强智)教务系统实现 | 评教 | 查课 | 抢课| 退课 的第三方库**_
 
 ## 支持功能
 | 评教 | 查课 | 抢课 | 退课 |
@@ -39,9 +39,11 @@ _**这是一个支持 广科师教务系统实现 | 评教 | 查课 | 抢课| �
 
 ```java
 public class Test{
+
    public static void main(String[] args) {
-      // 使用内网第二条备用路线登录
-      URLManager.useBackupLoginServer(2);
+      // 使用内置内网第二条备用路线登录
+      URLManager.useLocalNetServer(2);
+      
       // 登录使用
       JWSystem system = new JWSystem().login("username", "password");
       // 直接通过搜索获取全部的网课
@@ -51,6 +53,13 @@ public class Test{
       // 其他API...自行阅读代码
    }
 
+   
+   public static void setBaseURL(String baseURL){
+      // 自个指定学校的jw系统地址
+      // 也支持内网的url
+      URLManager.BASE_URL = "http://jw.xxxx.edu.com";
+   }
+   
    /**
     * KCID 每年都一样
     * JXID 每年不固定
@@ -61,6 +70,12 @@ public class Test{
        
        // 选择课程
        boolean statement = system.getCourseSelectManager().selectCourse(course);
+       
+       if (statement) {
+          System.out.println("退课成功");
+       } else {
+          System.out.println("退课失败");
+       }
        
    }
    

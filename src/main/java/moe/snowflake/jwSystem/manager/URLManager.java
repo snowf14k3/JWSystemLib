@@ -6,7 +6,7 @@ public class URLManager {
     /**
      * 使用内网服务器
      */
-    public static void useBackupLoginServer(int mode){
+    public static void useLocalNetServer(int mode){
         switch (mode){
             case 1:
                 BASE_URL = BACKUP_SERVER1;

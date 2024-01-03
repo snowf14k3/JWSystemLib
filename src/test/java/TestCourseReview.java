@@ -8,7 +8,7 @@ public class TestCourseReview {
     @Test
     public void testReview() {
         // 使用备用路线登录
-        URLManager.useBackupLoginServer(2);
+        URLManager.useLocalNetServer(2);
 
         JWSystem system = new JWSystem(false).login("username","password");
 

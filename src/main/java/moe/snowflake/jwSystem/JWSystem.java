@@ -87,13 +87,14 @@ public class JWSystem {
 
         // 登录成功的 响应
         Connection.Response response = HttpUtil.sendPost(URLManager.LOGIN, formData);
-        if (response != null) {
-            this.jwLoggedResponse = response;
-            this.setHeaders(response.cookie("JSESSIONID"));
-            this.loginCourseWeb();
-        } else {
+
+        if (response == null) {
             System.err.println("network error...");
+            return this;
         }
+        this.jwLoggedResponse = response;
+        this.setHeaders(response.cookie("JSESSIONID"));
+        this.loginCourseWeb();
         return this;
     }
 
@@ -111,6 +112,7 @@ public class JWSystem {
                 System.out.println("network error !");
                 return;
             }
+
             // 检测是否在选课时间内
             if (this.courseSelectSystemResponse.body().contains("时间范围")) this.courseSelectSystemResponse = null;
 
@@ -126,43 +128,43 @@ public class JWSystem {
     @Deprecated
     public void login1(String username, String password) {
         Connection.Response keyGet = HttpUtil.sendGet(URLManager.LOGIN_DATA);
-        if (keyGet != null && keyGet.statusCode() == 200) {
-            // 拿数据的
-            String dataStr = keyGet.body();
+        if (keyGet == null || keyGet.statusCode() != 200) {
+            System.err.println("network error");
+            return;
+        }
+        // 拿数据的
+        String dataStr = keyGet.body();
 
-            // 先检测他能否拿到加密数据的密钥
-            if (dataStr.split("#").length < 2) {
-                throw new RuntimeException("server or network error !");
-            }
+        // 先检测他能否拿到加密数据的密钥
+        if (dataStr.split("#").length < 2) {
+            throw new RuntimeException("server or network error !");
+        }
 
-            // 获取加密后的密码数据
-            String encoded = PasswordUtil.encodeUserData(dataStr, username + "%%%" + password);
-            // 测试数据
+        // 获取加密后的密码数据
+        String encoded = PasswordUtil.encodeUserData(dataStr, username + "%%%" + password);
+        // 测试数据
 
-            Map<String, String> formData = new HashMap<>();
-            formData.put("userAccount", "");
-            formData.put("userPassword", "");
-            formData.put("encoded", encoded);
+        Map<String, String> formData = new HashMap<>();
+        formData.put("userAccount", "");
+        formData.put("userPassword", "");
+        formData.put("encoded", encoded);
 
-            Connection.Response response = HttpUtil.sendPost(URLManager.LOGIN2, formData, this.headers);
+        Connection.Response response = HttpUtil.sendPost(URLManager.LOGIN2, formData, this.headers);
 
-            if (response == null) {
-                throw new RuntimeException("network error !");
-            }
+        if (response == null) {
+            throw new RuntimeException("network error !");
+        }
 
-            // 重定向到 URLManager.LOGIN2 + method= jwxt + ticqzket= token
-            Connection.Response ref = HttpUtil.sendGet(response.header("Location"));
-            //  登录成功分发 cookie
-            this.jwLoggedResponse = ref;
+        // 重定向到 URLManager.LOGIN2 + method= jwxt + ticqzket= token
+        Connection.Response ref = HttpUtil.sendGet(response.header("Location"));
+        //  登录成功分发 cookie
+        this.jwLoggedResponse = ref;
 
-            if (this.jwLoggedResponse != null) {
-                this.setHeaders(ref.cookie("JSESSIONID"));
-                this.loginCourseWeb();
-            } else {
-                System.err.println("response error....");
-            }
+        if (this.jwLoggedResponse != null) {
+            this.setHeaders(ref.cookie("JSESSIONID"));
+            this.loginCourseWeb();
         } else {
-            System.err.println("network error....");
+            System.err.println("response error....");
         }
     }
 
