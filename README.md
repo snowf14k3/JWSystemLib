@@ -2,34 +2,17 @@
 _**这是一个支持 广科师(强智)教务系统实现 | 评教 | 查课 | 抢课| 退课 的第三方库**_
 
 ## 支持功能
-| 评教 | 查课 | 抢课 | 退课 |
-| :--: | :--: | :--: | :--: |
-|  ×   |  √   |  √   |  √   |
+| 评教(大概率不会支持了) | 查课 | 抢课 | 退课 |
+|:------------:| :--: | :--: | :--: |
+|      ×       |  √   |  √   |  √   |
 
 ## 声明
 1. 本项目使用 `MIT License`,根据协议允许您进行任意修改/发布/传播,且造成后果与本项目无关.
 2. 特别感谢<a href="https://www.jetbrains.com"> JetBrains </a>  与 <a href="https://jsoup.org/"> JSoup </a>对这个项目的支持。
-3. 本项目仅为实现教务系统一些功能,不提供编写好的程序,且本项目不推荐商用.
+3. 本项目仅为实现教务系统一些功能,不提供编写好的程序.
 ---
 
-## 吐槽
-1. 由于学校服务器登录系统没有配好分流的系统,导致全校师生,
-   都只对一个服务器进行访问,出现了一站有难四站围观的
-   牛逼情况,其他4个内网镜像服务器跟没开一样.
-
-
-2. 这个教务系统我不做评价,在分析过程中遇到的变量名
-   把我恶心坏了,这个变量名字就是狗屎,有谁会拿`简拼`当变量名的啊?
-
----
-
-## 如何使用
-
-本lib就不上传至maven仓库了,需要使用请前往
-[releases](https://github.com/ciallo-dev/JWSystemLib/releases)
-下载使用
-
-### 代码引入
+## 代码引入
 
 1. 你能够将此代码引入Android进行开发第三方的app
 
@@ -82,7 +65,7 @@ public class Test{
 }
 ```
 
-### 例子
+## 例子
 
 1. [选课](https://github.com/ciallo-dev/JWSystemLib/blob/master/src/test/java/TestSelectCourse.java) 例子1
 2. [查已选课程退课](https://github.com/ciallo-dev/JWSystemLib/blob/master/src/test/java/TestMyCourse.java) 例子2

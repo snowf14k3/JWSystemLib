@@ -28,7 +28,7 @@ public class URLManager {
     /**
      * HOST地址
      */
-    public static String BASE_URL = "http://jw.gxstnu.edu.cn";
+    public static String BASE_URL = "https://jw.gxstnu.edu.cn";
 
     /**
      * 备用内网服务器1

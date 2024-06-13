@@ -38,9 +38,9 @@ public class JWSystem {
     public boolean isJWLogged() {
         try {
             if (this.jwLoggedResponse != null) {
-                // 只要有这个元素即登录失败
-                Element element = this.jwLoggedResponse.parse().getElementById("showMsg");
-                if (element != null) return false;
+                // 检测标题
+                // 如果标题为登录即为登录失败
+                if (this.jwLoggedResponse.parse().title().equals("登录")) return false;
             }
         } catch (Exception e) {
             return false;
@@ -83,11 +83,11 @@ public class JWSystem {
         formData.put("userAccount", username);
         formData.put("userPassword", "");
         // 很明显的两个base64加密
-        formData.put("encoded", new String(Base64.getEncoder().encode(username.getBytes())) + "%%%" + new String(Base64.getEncoder().encode(password.getBytes())));
+        formData.put("encoded", new String(Base64.getEncoder().encode(username.getBytes())) + "%%%" +
+                new String(Base64.getEncoder().encode(password.getBytes())));
 
         // 登录成功的 响应
         Connection.Response response = HttpUtil.sendPost(URLManager.LOGIN, formData);
-
         if (response == null) {
             System.err.println("network error...");
             return this;
@@ -173,20 +173,30 @@ public class JWSystem {
      */
     public void exit() {
         // 退出选课系统
-        Connection.Response exitSelect = HttpUtil.sendGet(URLManager.EXIT_COURSE_WEB, this.headers);
+        if (isLoginCourseSelectWeb()) exitCourseSelect();
         // 退出JW整个系统
         Connection.Response exitAll = HttpUtil.sendGet(URLManager.EXIT_JWSYSTEM, this.headers);
 
-        // DEBUG INFO
-        if (exitSelect != null && exitAll != null) {
-            // 退出选课系统的response body
-            if (exitSelect.body().contains("true")) System.out.println("退出选课系统成功");
+        if (exitAll != null && this.isJWLogged()) {
             // 教务系统退出
             if (exitAll.body().contains("jsxsd")) System.out.println("退出教务系统成功");
             return;
         }
         System.err.println("unknown error !");
     }
+
+    public void exitCourseSelect(){
+        // 退出选课系统
+        Connection.Response exitSelect = HttpUtil.sendGet(URLManager.EXIT_COURSE_WEB, this.headers);
+        if (exitSelect != null) {
+            // 退出选课系统的response body
+            if (exitSelect.body().contains("true")) System.out.println("退出选课系统成功");
+            // 教务系统退出
+            return;
+        }
+        System.err.println("unknown error !");
+    }
+
 
     public boolean isLoginCourseSelectWeb() {
         return this.loginCourseSelectWeb;
