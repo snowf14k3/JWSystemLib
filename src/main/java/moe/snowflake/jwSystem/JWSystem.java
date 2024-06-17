@@ -55,8 +55,10 @@ public class JWSystem {
      */
     public boolean isCourseLogged() {
         try {
-            return this.isJWLogged() &&
-                    this.courseSelectSystemResponse != null && !this.courseSelectSystemResponse.parse().title().contains("登录");
+            if (!this.isJWLogged() ||
+                    this.courseSelectSystemResponse == null) return false;
+            this.courseSelectSystemResponse.parse();
+            return !this.courseSelectSystemResponse.parse().title().contains("登录");
         } catch (IOException e) {
             return false;
         }
@@ -126,11 +128,11 @@ public class JWSystem {
      * @param password 密码
      */
     @Deprecated
-    public void login1(String username, String password) {
+    public JWSystem login1(String username, String password) {
         Connection.Response keyGet = HttpUtil.sendGet(URLManager.LOGIN_DATA);
         if (keyGet == null || keyGet.statusCode() != 200) {
             System.err.println("network error");
-            return;
+            return this;
         }
         // 拿数据的
         String dataStr = keyGet.body();
@@ -166,6 +168,7 @@ public class JWSystem {
         } else {
             System.err.println("response error....");
         }
+        return this;
     }
 
     /**

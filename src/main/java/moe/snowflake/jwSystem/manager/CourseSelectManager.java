@@ -10,8 +10,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class CourseSelectManager {
     private final JWSystem system;
@@ -294,5 +298,42 @@ public class CourseSelectManager {
     public ArrayList<Course> getElectiveCourseByStatement(boolean removeFull, boolean removeConflict, boolean loc) {
         return this.searchElectiveList("", "", 0, "", removeFull, removeConflict, "", loc, 200);
     }
+
+    /**
+     * 通过本地文件读取课程信息，达到控制台直接选课
+     * <p> 格式：一行为一个课程  使用 ' , ' 进行分割,
+     * <p> 0 -> 课程名称
+     * <p> 1 -> 课程类型
+     * <p> 2 -> 授课老师
+     * <p> 3 -> kcid
+     * <p> 4 -> jxid
+     *
+     * @param file
+     */
+    public static List<Course> loadLocalCourse(File file){
+        ArrayList<Course> courses = new ArrayList<>();
+        try (Stream<String> stream = Files.lines(file.toPath())){
+            stream.forEach(line ->{
+                String[] c = line.split(",");
+
+                Course course = new Course(c[3],c[4]);
+
+                // 课程名称
+                course.setName(c[0]);
+
+                // 课程类型
+                course.setType(c[1]);
+
+                // 授课老师
+                course.setTeacher(c[2]);
+
+                courses.add(course);
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return courses;
+    }
+
 
 }

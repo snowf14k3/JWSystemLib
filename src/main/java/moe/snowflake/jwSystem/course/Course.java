@@ -100,7 +100,7 @@ public class Course {
     }
 
     public String getTeacher() {
-        return teacher;
+        return teacher.replace(",","&");
     }
 
     public String getScore() {
