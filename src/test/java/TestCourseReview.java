@@ -15,6 +15,10 @@ public class TestCourseReview {
         // 使用备用路线登录
 //        URLManager.useLocalNetServer(1);
 
+        // 记得选课前去查看,本学期的 zbid 是多少，否则显示的就是上一学期的课程
+        // 浏览器url上就有
+        JWSystem.zbID = "09EC4EAFA547423EA6494389B2729552";
+
         JWSystem system = new JWSystem().login("username", "password");
 
         // W.I.P

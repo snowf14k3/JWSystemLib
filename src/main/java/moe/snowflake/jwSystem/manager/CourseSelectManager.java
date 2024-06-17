@@ -246,8 +246,8 @@ public class CourseSelectManager {
 
         Connection.Response response = HttpUtil.sendPost(URLManager.ELECTIVE_COURSE_LIST + args, formMap, this.system.headers);
         if (response != null) {
-            String emptyListJson = response.body();
-            return CourseDataHandler.getCourses(emptyListJson);
+            String json = response.body();
+            return CourseDataHandler.getCourses(json);
         }
         // 如果是网络原因返回空
         return new ArrayList<>();

@@ -74,7 +74,7 @@ public class URLManager {
      * <p>
      * 登录选课系统
      */
-    public static String COURSE_LOGIN_WEB = BASE_URL + "/jsxsd/xsxk/xsxk_index?jx0502zbid=F17F6D4A35AF4EDA8727F42C3BCAF124";
+    public static String COURSE_LOGIN_WEB = BASE_URL + "/jsxsd/xsxk/xsxk_index?jx0502zbid=<zbid>";
 
     /**
      * METHOD:GET

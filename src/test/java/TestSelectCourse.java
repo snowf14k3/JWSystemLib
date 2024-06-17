@@ -9,11 +9,15 @@ public class TestSelectCourse {
 
     @Test
     public void test() {
+        // 记得选课前去查看,本学期的 zbid 是多少，否则显示的就是上一学期的课程
+        // 浏览器url上就有
+        JWSystem.zbID = "09EC4EAFA547423EA6494389B2729552";
+
         // 登录
         JWSystem system = new JWSystem().login("username", "password");
 
         // 检测两个系统是否都登录了
-        if (system.isCourseLogged()) {
+        if (system.isJWLogged()) {
             // 查找课程
             ArrayList<Course> courses = system.getCourseSelectManager().getAllElectiveCourse();
 //            ArrayList<Course> courses = system.getCourseSelectManager().getElectiveCourseByTeacher("网络课程");
@@ -21,7 +25,7 @@ public class TestSelectCourse {
 
             for (int i = 0; i < courses.size(); i++) {
                 Course course = courses.get(i);
-//                System.out.printf("%s,%s,%s,%s,%s,%s%n",course.getName(),course.getType(),course.getTeacher(),course.getKcid(),course.getJxID(),course.getScore());
+//                System.out.printf("%s,%s,%s,%s,%s,%s,%s%n", course.getName(), course.getType(), course.getTeacher(), course.getKcid(), course.getJxID(), course.getScore(), course.getRemain());
                 System.out.printf("序号 %d | 老师: %s | 课程名称: %s | 剩余数量: %s %n", i + 1, course.getTeacher(), course.getName(), course.getRemain());
             }
 

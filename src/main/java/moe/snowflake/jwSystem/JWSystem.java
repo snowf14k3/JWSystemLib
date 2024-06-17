@@ -100,6 +100,8 @@ public class JWSystem {
         return this;
     }
 
+    public static String zbID = "F17F6D4A35AF4EDA8727F42C3BCAF124";
+
     /**
      * 用于直接登录选课系统
      * 先登录学生选课系统,让后台存JSESSIONID
@@ -108,7 +110,8 @@ public class JWSystem {
     public void loginCourseWeb() {
         // 是否登录选课系统
         if (isLoginCourseSelectWeb()) {
-            this.courseSelectSystemResponse = HttpUtil.sendGet(URLManager.COURSE_LOGIN_WEB, this.headers);
+            this.courseSelectSystemResponse = HttpUtil.sendGet(URLManager.COURSE_LOGIN_WEB
+                    .replace("<zbid>",zbID), this.headers);
 
             if (this.courseSelectSystemResponse == null) {
                 System.out.println("network error !");

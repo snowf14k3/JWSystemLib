@@ -10,6 +10,9 @@ public class TestMyCourse {
 
     @Test
     public void test() throws IOException {
+        // 记得选课前去查看,本学期的 zbid 是多少，否则显示的就是上一学期的课程
+        // 浏览器url上就有
+        JWSystem.zbID = "09EC4EAFA547423EA6494389B2729552";
         JWSystem system = new JWSystem().login("username", "password");
 
         if (system.isCourseLogged()) {
