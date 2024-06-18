@@ -17,7 +17,7 @@ public class TestLocalSelectCourse {
         List<Course> courses = CourseSelectManager.loadLocalCourse
                 (new File("/courses.csv"));
 
-        for (int i = 1; i < courses.size(); i++) {
+        for (int i = 0; i < courses.size(); i++) {
             Course course = courses.get(i);
             // 输出课程名称 老师 jxid kcid
             System.out.printf("%s,%s,%s,%s,%s%n", i + 1, course.getName(), course.getTeacher(), course.getJxID(),course.getKcid());
@@ -38,7 +38,7 @@ public class TestLocalSelectCourse {
             List<Course> courses = CourseSelectManager.loadLocalCourse
                     (new File("/courses.csv"));
 
-            for (int i = 1; i < courses.size(); i++) {
+            for (int i = 0; i < courses.size(); i++) {
                 Course course = courses.get(i);
                 // 输出课程名称 老师 jxid kcid
                 System.out.printf("%s,%s,%s,%s,%s%n", i + 1, course.getName(), course.getTeacher(), course.getJxID(),course.getKcid());
